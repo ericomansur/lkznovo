@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LKZ STORE</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css"/>
+  <link rel="icon" type="image/x-icon" href="imagens/lkz_logo.jpg">
+</head>
+<body class="bg-gray-900 text-white font-sans">
+  <!-- HEADER -->
+  <header class="flex justify-between items-center px-6 py-4 bg-gray-800 shadow-md">
+    <div class="text-2xl font-bold text-blue-400">LKZ <span class="text-white">STORE</span></div>
+    <a href="https://wa.me/55SEUNUMERO?text=Quero%20vender%20meu%20invent%C3%A1rio"
+       class="bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-400 transition flex items-center gap-2"
+       target="_blank">
+      <i class="fa-brands fa-whatsapp"></i> Vender meu Inventário
+    </a>
+  </header>
+
+  <!-- BANNER -->
+  <section class="h-48 bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center">
+    <h1 class="text-4xl font-extrabold">A arte vai ficar aqui</h1>
+  </section>
+
+  <!-- CATEGORIAS -->
+  <nav class="flex flex-wrap justify-center gap-2 p-4 bg-gray-800">
+    <button data-filter="all" class="filter-btn px-3 py-1 bg-blue-500 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2 active">
+      <img src="imagens/cards/Todas.png" alt="Todas" class="w-4 h-4">
+      Todas
+    </button>
+    <button data-filter="knives" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
+      <img src="imagens/cards/Facas.png" alt="Facas" class="w-6 h-4">
+      Facas
+    </button>
+    <button data-filter="gloves" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
+      <img src="imagens/cards/Luvas.png" alt="Luvas" class="w-5 h-4">
+      Luvas
+    </button>
+    <button data-filter="pistols" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
+      <img src="imagens/cards/Pistolas.png" alt="Pistolas" class="w-7 h-4">
+      Pistolas
+    </button>
+    <button data-filter="rifles" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
+      <img src="imagens/cards/Rifles.png" alt="Rifles" class="w-8 h-4">
+      Rifles
+    </button>
+    <button data-filter="smgs" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
+      <img src="imagens/cards/Smg.png" alt="SMGs" class="w-6 h-4">
+      SMGs
+    </button>
+    <button data-filter="heavy" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
+      <img src="imagens/cards/Pesadas.png" alt="Pesadas" class="w-7 h-4">
+      Pesadas
+    </button>
+    <button data-filter="stickers" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
+      <img src="imagens/cards/Adesivos.png" alt="Adesivos" class="w-4 h-4">
+      Adesivos
+    </button>
+    <button data-filter="agents" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
+      <img src="imagens/cards/Agentes.png" alt="Agentes" class="w-4 h-4">
+      Agentes
+    </button>
+    <button data-filter="cases" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
+      <img src="imagens/cards/Caixas.png" alt="Caixas" class="w-5 h-4">
+      Caixas
+    </button>
+    <button data-filter="outros" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
+      <img src="imagens/cards/Outros.png" alt="Outros" class="w-4 h-4">
+      Outros
+    </button>
+  </nav>
+
+  <!-- FILTROS -->
+  <div class="flex flex-wrap gap-4 justify-center items-center p-4 bg-gray-900 border-b border-gray-700">
+    <!-- Filtro de nome -->
+    <div class="flex items-center bg-gray-800 px-3 py-2 rounded-lg">
+      <i class="fa fa-search text-gray-400 mr-2"></i>
+      <input id="search" type="text" placeholder="Buscar skins..." class="bg-transparent outline-none text-sm text-white w-48">
+    </div>
+  </div>
+
+  <!-- LISTA DE SKINS -->
+  <section id="skins-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 p-6">
+    <!-- Skins carregadas via script.js -->
+  </section>
+
+  <script>
+    // JavaScript para o filtro de categorias
+    document.addEventListener('DOMContentLoaded', () => {
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const skinsGrid = document.getElementById('skins-grid');
+      
+      // Função para ativar o filtro
+      function activateFilter(event) {
+        // Remover a classe 'active' de todos os botões
+        filterBtns.forEach(button => button.classList.remove('active'));
+        
+        // Adicionar a classe 'active' ao botão clicado
+        event.target.classList.add('active');
+        
+        // Lógica para filtrar as skins
+        // A lógica de exibição de skins deve ser adicionada aqui com base na categoria selecionada
+        const filter = event.target.getAttribute('data-filter');
+        console.log(`Categoria selecionada: ${filter}`);
+        // Exemplo de como filtrar as skins
+        // Lógica para carregar ou mostrar as skins de acordo com o filtro selecionado
+      }
+
+      // Adicionar event listeners aos botões de filtro
+      filterBtns.forEach(button => {
+        button.addEventListener('click', activateFilter);
+      });
+
+      // Lógica para mostrar as skins no carregamento inicial (filtro "all" ativo)
+      const allButton = document.querySelector('[data-filter="all"]');
+      allButton.click();  // Simula o clique no botão "Todas" ao carregar a página
+    });
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>
