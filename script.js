@@ -6,14 +6,25 @@ const SKINS = [
   // FACAS
   // ============================
   {
-    nome: "★ Butterfly | Fade",
-    condicao: "Factory New",
+    nome: "★ Kukri Knife | Blue Steel",
+    condicao: "Field-Tested",
     categoria: "knives",
-    float: 0.005,
-    imagem: "imagens/skins/KAFADE.png",
-    inspectLink: "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%200018830420262806300338FDE383E10340A005F55DC767",
-    csfloatLink: "https://csfloat.com/item/883684185066307792",
-    whatsapp: "https://wa.me/55SEUNUMERO?text=Quero%20essa%20Karambit%20Fade"
+    float: 0.339,
+    imagem: "imagens/skins/KukriBS.png",
+    inspectLink: "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%2000188E04202A2806300338D0FDB7F50340E20477966632",
+    csfloatLink: "https://csfloat.com/item/885218411985111069",
+    whatsapp: "https://wa.me/556799288899?text=Quero%20essa%20Kukri%20Blue%20Steel"
+  },
+
+  {
+    nome: "★ Kukri Knife | Case Hardened",
+    condicao: "Minimal Wear",
+    categoria: "knives",
+    float: 0.118,
+    imagem: "imagens/skins/KukriCH.png",
+    inspectLink: "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%2000188E04202C2806300338CCE7C9EF0340830114D340D9",
+    csfloatLink: "https://csfloat.com/item/885217832969830681",
+    whatsapp: "https://wa.me/556799288899?text=Quero%20essa%20Kukri%20Case%20Hardened"
   },
 
   // ============================
@@ -27,7 +38,7 @@ const SKINS = [
     imagem: "imagens/skins/luvas_mogui.png",
     inspectLink: "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%200018AA2720D04E280630033883B2E8F90340E502792B7D3A",
     csfloatLink: "https://csfloat.com/item/879782342414174629",
-    whatsapp: "https://wa.me/55SEUNUMERO?text=Quero%20essas%20Specialist%20Gloves%20Mogul"
+    whatsapp: "https://wa.me/556799288899?text=Quero%20essas%20Specialist%20Gloves%20Mogul"
   },
 
   // ============================
@@ -41,7 +52,7 @@ const SKINS = [
     imagem: "imagens/skins/glock.png",
     inspectLink: "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%2000180420810128063004389E9584F50340DA019D31FC92",
     csfloatLink: "https://csfloat.com/item/880125429116177470",
-    whatsapp: "https://wa.me/55SEUNUMERO?text=Quero%20essa%20Glock-18%20Gold%20Toof"
+    whatsapp: "https://wa.me/556799288899?text=Quero%20essa%20Glock-18%20Gold%20Toof"
   },
 
   // ============================
@@ -55,7 +66,7 @@ const SKINS = [
     imagem: "imagens/skins/akasii.png",
     inspectLink: "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%2000180720A10628063004388D97F3F20340A50262190800108B291D000000002D000040403D720B81BE45B065E23C7EBA2638",
     csfloatLink: "https://csfloat.com/item/880125221762369577",
-    whatsapp: "https://wa.me/55SEUNUMERO?text=Quero%20essa%20AK-47%20Asiimov"
+    whatsapp: "https://wa.me/556799288899?text=Quero%20essa%20AK-47%20Asiimov"
   },
 
   // ============================
@@ -69,7 +80,7 @@ const SKINS = [
     imagem: "imagens/skins/mp9.png",
     inspectLink: "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20S76561198869624827A34718817419D7216673156348019920",
     csfloatLink: "https://csfloat.com/item/884348488798830835",
-    whatsapp: "https://wa.me/55SEUNUMERO?text=Quero%20essa%20MP9%20Hot%20Rod"
+    whatsapp: "https://wa.me/556799288899?text=Quero%20essa%20MP9%20Hot%20Rod"
   },
 
   // ============================
@@ -83,7 +94,7 @@ const SKINS = [
     imagem: "imagens/skins/negev.png",
     inspectLink: "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%2000181C20BA052804300438A48FC2F20340D1020103FE75",
     csfloatLink: "https://csfloat.com/item/881253115297401792",
-    whatsapp: "https://wa.me/55SEUNUMERO?text=Quero%20essa%20Negev%20Lionfish"
+    whatsapp: "https://wa.me/556799288899?text=Quero%20essa%20Negev%20Lionfish"
   },
 
   // ============================
@@ -95,7 +106,7 @@ const SKINS = [
     imagem: "imagens/skins/adesivo.png",
     inspectLink: "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20S76561199108593308A41905639961D5514201921302140417",
     csfloatLink: "https://csfloat.com/item/883476156446277971",
-    whatsapp: "https://wa.me/55SEUNUMERO?text=Quero%20esse%20Adesivo%20Teste"
+    whatsapp: "https://wa.me/556799288899?text=Quero%20esse%20Adesivo%20Teste"
   },
 
   // ============================
@@ -106,7 +117,7 @@ const SKINS = [
     categoria: "agents",
     imagem: "imagens/skins/agente.png",
     csfloatLink: "https://csfloat.com/item/885008170924248037",
-    whatsapp: "https://wa.me/55SEUNUMERO?text=Quero%20esse%20Agente%20Teste"
+    whatsapp: "https://wa.me/556799288899?text=Quero%20esse%20Agente%20Teste"
   },
 
   // ============================
@@ -117,7 +128,7 @@ const SKINS = [
     categoria: "cases",
     imagem: "imagens/skins/caixa.png",
     csfloatLink: "https://csfloat.com/item/884535123658279606",
-    whatsapp: "https://wa.me/55SEUNUMERO?text=Quero%20essa%20Caixa%20Teste"
+    whatsapp: "https://wa.me/556799288899?text=Quero%20essa%20Caixa%20Exemplo"
   }
 ];
 
