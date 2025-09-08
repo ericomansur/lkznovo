@@ -192,3 +192,76 @@ header a:focus {
   transform: scale(1.1);
 }
 
+/* ===== MELHORIAS NOS CARDS ===== */
+.skin-card-header {
+  background-color: #111827; /* Cor mais escura para o cabeçalho */
+  padding: 0.75rem;
+  border-bottom: 1px solid #374151;
+}
+
+.skin-card-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.skin-card-condition {
+  color: #9ca3af;
+  font-size: 0.8rem;
+}
+
+.skin-card-body {
+  padding: 0.75rem;
+  position: relative;
+}
+
+.skin-card-footer {
+  padding: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1f2937;
+  border-top: 1px solid #374151;
+  min-height: 60px; /* Altura mínima para alinhar os botões */
+}
+
+/* Garantir que os botões tenham altura consistente */
+.skin-card-price {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #10b981; /* Verde para o preço */
+}
+
+.skin-card-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.skin-card-button {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+}
+
+.skin-card-button:hover {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+}
+
+/* Estilo para quando não há float */
+.no-float-placeholder {
+  visibility: hidden;
+  height: 0;
+}
