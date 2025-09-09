@@ -311,3 +311,26 @@ footer {
                 height: 30px;
             }
         }
+
+        /* Ribbon de Vendido */
+.skin-card-body {
+  position: relative;
+}
+
+/* Ribbon grande centralizado para Vendido */
+.ribbon-vendido {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  width: 200%;
+  background: #dc2626; /* vermelho */
+  color: white;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 8px 0;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  z-index: 10;
+}
+
