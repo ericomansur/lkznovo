@@ -156,14 +156,11 @@ document.getElementById("update-sold").addEventListener("click", async () => {
 
   try {
     for (const cb of checkboxes) {
-      const res = await fetch(`${API_URL}/skins/${cb.dataset.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ sold: cb.checked }),
-      });
+    const res = await fetch(`${API_URL}/skins`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` }, // ❌ remove Content-Type
+    body: formData, // FormData enviado corretamente
+    });
       if (!res.ok) throw new Error(`Erro ao atualizar skin ${cb.dataset.id}`);
     }
     alert("✅ Skins atualizadas com sucesso!");
