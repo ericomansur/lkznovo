@@ -21,7 +21,6 @@ soldModal.id = "sold-modal";
 soldModal.className = "fixed inset-0 bg-black/60 flex items-center justify-center hidden z-50";
 soldModal.innerHTML = `
   <div class="bg-gray-800 p-6 rounded-xl max-w-lg w-full shadow-lg">
-    <h2 class="text-xl font-bold mb-4">Marcar Skins como Vendida</h2>
     <div id="sold-skins-list" class="flex flex-col gap-2 max-h-96 overflow-y-auto mb-4"></div>
     <button id="confirm-sold" class="w-full bg-green-500 hover:bg-green-400 py-2 rounded mb-2">Marcar como Vendida</button>
     <button id="close-sold" class="w-full bg-red-500 hover:bg-red-400 py-2 rounded">Fechar</button>
