@@ -76,7 +76,7 @@ async function loadSkinsAdmin() {
             headers: { Authorization: `Bearer ${token}` },
           });
           if (!res.ok) throw new Error("Erro ao remover skin");
-          loadSkinsAdmin(); // Atualiza lista
+          loadSkinsAdmin();
         } catch (err) {
           alert(err.message);
         }
@@ -95,33 +95,30 @@ document.getElementById("skin-form").addEventListener("submit", async (e) => {
   const token = localStorage.getItem("token");
   if (!token) return alert("Faça login novamente.");
 
-  const nome = document.getElementById("nome").value;
-  const condicao = document.getElementById("condicao").value;
-  const categoria = document.getElementById("categoria").value;
-  const floatValue = document.getElementById("float").value || "";
-  const inspectLink = document.getElementById("inspectLink").value;
-  const csfloatLink = document.getElementById("csfloatLink").value;
+  const name = document.getElementById("nome").value;
+  const condition = document.getElementById("condicao").value;
+  const category = document.getElementById("categoria").value;
+  const floatValue = document.getElementById("float").value || null;
+  const inspectLink = document.getElementById("inspectLink").value || null;
+  const csfloatLink = document.getElementById("csfloatLink").value || null;
   const whatsappMsg = encodeURIComponent(document.getElementById("whatsappMsg").value);
 
-  const imagemLink = document.getElementById("imagemLink").value;
-  const imagemUpload = document.getElementById("imagemUpload").files[0];
+  const imageUrl = document.getElementById("imagemLink").value;
+  const imageUpload = document.getElementById("imagemUpload").files[0];
 
-  if (!imagemLink && !imagemUpload) {
-    alert("Preencha o link da imagem ou faça upload da imagem.");
-    return;
-  }
+  if (!imageUrl && !imageUpload) return alert("Preencha o link da imagem ou faça upload da imagem.");
 
   const formData = new FormData();
-  formData.append("name", nome);
-  formData.append("condition", condicao);
-  formData.append("category", categoria);
+  formData.append("name", name);
+  formData.append("condition", condition);
+  formData.append("category", category);
   formData.append("floatValue", floatValue);
   formData.append("inspectLink", inspectLink);
   formData.append("csfloatLink", csfloatLink);
-  formData.append("whatsappLink", `https://wa.me/556799288899?text=${whatsappMsg}`);
+  formData.append("whatsapp", `https://wa.me/556799288899?text=${whatsappMsg}`);
 
-  if (imagemUpload) formData.append("imageUrl", imagemUpload);
-  else formData.append("imageUrl", imagemLink);
+  if (imageUpload) formData.append("image", imageUpload);
+  else formData.append("image", imageUrl);
 
   try {
     const res = await fetch(`${API_URL}/skins`, {
@@ -154,19 +151,19 @@ document.getElementById("update-sold").addEventListener("click", async () => {
   if (!token) return;
 
   const checkboxes = document.querySelectorAll(".checkbox-vendido");
-  const updates = [];
-
-  checkboxes.forEach((cb) => {
-    updates.push({ id: cb.dataset.id, sold: cb.checked });
-  });
 
   try {
-    const res = await fetch(`${API_URL}/skins/vendido`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-      body: JSON.stringify(updates),
-    });
-    if (!res.ok) throw new Error("Erro ao atualizar skins");
+    for (const cb of checkboxes) {
+      const res = await fetch(`${API_URL}/skins/${cb.dataset.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ sold: cb.checked }),
+      });
+      if (!res.ok) throw new Error(`Erro ao atualizar skin ${cb.dataset.id}`);
+    }
     alert("✅ Skins atualizadas com sucesso!");
     loadSkinsAdmin();
   } catch (err) {
