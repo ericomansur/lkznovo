@@ -59,7 +59,7 @@ function renderSkins(list) {
         <div class="skin-card-condition">${skin.condition || ""}</div>
       </div>
       <div class="skin-card-body flex flex-col items-center p-4 relative">
-        <img src="${skin.image}" alt="${skin.name}" class="w-32 h-32 object-contain">
+        <img src="${skin.imageURL}" alt="${skin.name}" class="w-32 h-32 object-contain">
         ${skin.sold ? `<div class="ribbon-vendido">VENDIDO</div>` : ""}
         ${skin.floatValue !== undefined && skin.floatValue !== null
           ? `<span class="text-sm ${floatColor} mt-2 font-mono">Float: ${skin.floatValue.toFixed(3)}</span>`
