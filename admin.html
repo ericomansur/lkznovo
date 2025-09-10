@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - LKZ Store</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
+
+  <div class="w-full max-w-md bg-gray-800 p-6 rounded-xl shadow-md">
+    <!-- LOGIN -->
+    <div id="login-section">
+      <h2 class="text-xl font-bold mb-4">Login Admin</h2>
+      <input id="username" type="text" placeholder="Usuário" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
+      <input id="password" type="password" placeholder="Senha" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
+      <button onclick="login()" class="w-full bg-blue-500 hover:bg-blue-400 text-white py-2 rounded">Entrar</button>
+      <p id="login-error" class="text-red-500 text-sm mt-2 hidden">Usuário ou senha inválidos</p>
+    </div>
+
+    <!-- ADMIN -->
+    <div id="admin-section" class="hidden">
+      <h2 class="text-xl font-bold mb-4">Cadastrar Skin</h2>
+      <form id="skin-form" class="flex flex-col gap-3">
+        <input id="nome" type="text" placeholder="Nome da Skin" class="p-2 rounded bg-gray-700 text-white">
+        <input id="condicao" type="text" placeholder="Condição (ex: Factory New)" class="p-2 rounded bg-gray-700 text-white">
+        <input id="imagem" type="text" placeholder="URL da Imagem" class="p-2 rounded bg-gray-700 text-white">
+        <input id="float" type="number" step="0.0001" placeholder="Float (opcional)" class="p-2 rounded bg-gray-700 text-white">
+        <input id="categoria" type="text" placeholder="Categoria (Facas, Rifles...)" class="p-2 rounded bg-gray-700 text-white">
+        <input id="inspectLink" type="text" placeholder="Link Inspect (opcional)" class="p-2 rounded bg-gray-700 text-white">
+        <input id="csfloatLink" type="text" placeholder="Link CSFloat (opcional)" class="p-2 rounded bg-gray-700 text-white">
+        <input id="whatsapp" type="text" placeholder="Link WhatsApp (opcional)" class="p-2 rounded bg-gray-700 text-white">
+        <button type="submit" class="w-full bg-green-500 hover:bg-green-400 py-2 rounded">Salvar Skin</button>
+      </form>
+      <p id="save-message" class="text-sm mt-3 hidden"></p>
+      <button onclick="logout()" class="mt-4 w-full bg-red-500 hover:bg-red-400 py-2 rounded">Sair</button>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "https://lkz-store-backend.onrender.com/"; // coloca a URL do teu backend
+
+    // LOGIN
+    async function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        const res = await fetch(`${API_URL}/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        });
+
+        if (!res.ok) throw new Error("Login inválido");
+
+        const data = await res.json();
+        localStorage.setItem("token", data.token);
+
+        document.getElementById("login-section").classList.add("hidden");
+        document.getElementById("admin-section").classList.remove("hidden");
+      } catch (err) {
+        document.getElementById("login-error").classList.remove("hidden");
+      }
+    }
+
+    // CADASTRO SKIN
+    document.getElementById("skin-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const token = localStorage.getItem("token");
+      if (!token) return alert("Faça login novamente.");
+
+      const skin = {
+        nome: document.getElementById("nome").value,
+        condicao: document.getElementById("condicao").value,
+        imagem: document.getElementById("imagem").value,
+        float: document.getElementById("float").value ? parseFloat(document.getElementById("float").value) : null,
+        categoria: document.getElementById("categoria").value,
+        inspectLink: document.getElementById("inspectLink").value,
+        csfloatLink: document.getElementById("csfloatLink").value,
+        whatsapp: document.getElementById("whatsapp").value,
+      };
+
+      try {
+        const res = await fetch(`${API_URL}/skins`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(skin),
+        });
+
+        if (!res.ok) throw new Error("Erro ao salvar");
+
+        document.getElementById("save-message").textContent = "✅ Skin cadastrada com sucesso!";
+        document.getElementById("save-message").classList.remove("hidden");
+        document.getElementById("save-message").classList.add("text-green-400");
+
+        e.target.reset();
+      } catch (err) {
+        document.getElementById("save-message").textContent = "❌ Erro ao salvar skin.";
+        document.getElementById("save-message").classList.remove("hidden");
+        document.getElementById("save-message").classList.add("text-red-400");
+      }
+    });
+
+    // LOGOUT
+    function logout() {
+      localStorage.removeItem("token");
+      document.getElementById("admin-section").classList.add("hidden");
+      document.getElementById("login-section").classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>
