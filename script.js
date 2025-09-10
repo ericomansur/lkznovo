@@ -13,7 +13,8 @@ const categoryButtons = document.querySelectorAll("nav button[data-filter]");
 // Botão e modal de marcar como vendida
 const markSoldBtn = document.createElement("button");
 markSoldBtn.textContent = "Marcar Skin como Vendida";
-markSoldBtn.className = "fixed top-24 right-8 bg-yellow-500 hover:bg-yellow-400 text-black px-4 py-2 rounded shadow-lg z-50";
+markSoldBtn.className =
+  "fixed top-24 right-8 bg-yellow-500 hover:bg-yellow-400 text-black px-4 py-2 rounded shadow-lg z-50";
 document.body.appendChild(markSoldBtn);
 
 const soldModal = document.createElement("div");
@@ -62,14 +63,14 @@ function renderSkins(list) {
 
   list.forEach((skin) => {
     const card = document.createElement("div");
-    card.className = `skin-card bg-gray-800 rounded-xl overflow-hidden shadow-md transition flex flex-col ${skin.categoria}`;
+    card.className = `skin-card bg-gray-800 rounded-xl overflow-hidden shadow-md transition flex flex-col ${skin.category}`;
 
-    let floatColor = "text-white-500";
-    if (skin.float !== undefined) {
-      if (skin.float <= 0.07) floatColor = "text-blue-400";
-      else if (skin.float <= 0.15) floatColor = "text-purple-400";
-      else if (skin.float <= 0.38) floatColor = "text-yellow-500";
-      else if (skin.float <= 0.45) floatColor = "text-orange-500";
+    let floatColor = "text-white";
+    if (skin.floatValue !== undefined) {
+      if (skin.floatValue <= 0.07) floatColor = "text-blue-400";
+      else if (skin.floatValue <= 0.15) floatColor = "text-purple-400";
+      else if (skin.floatValue <= 0.38) floatColor = "text-yellow-500";
+      else if (skin.floatValue <= 0.45) floatColor = "text-orange-500";
       else floatColor = "text-red-500";
     }
 
@@ -77,14 +78,14 @@ function renderSkins(list) {
 
     card.innerHTML = `
       <div class="skin-card-header">
-        <div class="skin-card-name">${skin.nome}</div>
-        <div class="skin-card-condition">${skin.condicao || ""}</div>
+        <div class="skin-card-name">${skin.name}</div>
+        <div class="skin-card-condition">${skin.condition || ""}</div>
       </div>
       <div class="skin-card-body flex flex-col items-center p-4 relative">
-        <img src="${skin.imagem}" alt="${skin.nome}" class="w-32 h-32 object-contain">
-        ${skin.vendido ? `<div class="ribbon-vendido">VENDIDO</div>` : ""}
-        ${skin.float !== undefined
-          ? `<span class="text-sm ${floatColor} mt-2 font-mono">Float: ${skin.float.toFixed(3)}</span>`
+        <img src="${skin.imageUrl}" alt="${skin.name}" class="w-32 h-32 object-contain">
+        ${skin.sold ? `<div class="ribbon-vendido">VENDIDO</div>` : ""}
+        ${skin.floatValue !== undefined
+          ? `<span class="text-sm ${floatColor} mt-2 font-mono">Float: ${skin.floatValue.toFixed(3)}</span>`
           : '<div class="h-5 mt-2"></div>'
         }
       </div>
@@ -92,7 +93,7 @@ function renderSkins(list) {
         <div class="flex gap-2 w-full justify-center">
           ${skin.inspectLink ? `<a href="${skin.inspectLink}" class="bg-blue-500 hover:bg-blue-400 text-white px-2 py-1 rounded flex items-center gap-1 transition-colors text-sm" target="_blank"><i class="fa fa-eye text-xs"></i> ${isMobileView ? "" : '<span class="hidden sm:inline text-xs">Inspecionar</span>'}</a>` : ""}
           ${skin.csfloatLink ? `<a href="${skin.csfloatLink}" class="bg-indigo-500 hover:bg-indigo-400 text-white px-2 py-1 rounded flex items-center gap-1 transition-colors text-sm" target="_blank"><i class="fa fa-external-link text-xs"></i> ${isMobileView ? "" : '<span class="hidden sm:inline text-xs">CSFloat</span>'}</a>` : ""}
-          ${skin.whatsapp ? `<a href="${skin.whatsapp}" class="bg-green-500 hover:bg-green-400 text-white px-2 py-1 rounded flex items-center gap-1 transition-colors text-sm" target="_blank"><i class="fa-brands fa-whatsapp text-xs"></i> ${isMobileView ? "" : '<span class="hidden sm:inline text-xs">WhatsApp</span>'}</a>` : ""}
+          ${skin.whatsappLink ? `<a href="${skin.whatsappLink}" class="bg-green-500 hover:bg-green-400 text-white px-2 py-1 rounded flex items-center gap-1 transition-colors text-sm" target="_blank"><i class="fa-brands fa-whatsapp text-xs"></i> ${isMobileView ? "" : '<span class="hidden sm:inline text-xs">WhatsApp</span>'}</a>` : ""}
         </div>
       </div>
     `;
@@ -110,8 +111,8 @@ function openSoldModal() {
     item.className = "flex items-center justify-between p-2 bg-gray-700 rounded";
     item.innerHTML = `
       <label class="flex items-center gap-2">
-        <input type="checkbox" value="${skin.id}" ${skin.vendido ? "checked disabled" : ""}>
-        <span>${skin.nome} (${skin.condicao})</span>
+        <input type="checkbox" value="${skin.id}" ${skin.sold ? "checked disabled" : ""}>
+        <span>${skin.name} (${skin.condition})</span>
       </label>
     `;
     soldSkinsList.appendChild(item);
@@ -174,7 +175,7 @@ categoryButtons.forEach((btn) => {
 
     const filter = btn.getAttribute("data-filter");
     let filtered = allSkins;
-    if (filter !== "all") filtered = allSkins.filter((s) => s.categoria === filter);
+    if (filter !== "all") filtered = allSkins.filter((s) => s.category === filter);
 
     renderSkins(filtered);
   });
@@ -185,7 +186,7 @@ categoryButtons.forEach((btn) => {
 // ============================
 searchInput.addEventListener("input", (e) => {
   const query = e.target.value.toLowerCase();
-  const filtered = allSkins.filter((s) => s.nome.toLowerCase().includes(query));
+  const filtered = allSkins.filter((s) => s.name.toLowerCase().includes(query));
   renderSkins(filtered);
 });
 

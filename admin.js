@@ -19,14 +19,76 @@ async function login() {
     localStorage.setItem("token", data.token);
     document.getElementById("login-section").classList.add("hidden");
     document.getElementById("admin-section").classList.remove("hidden");
-    loadSoldSkins();
+    loadSkinsAdmin();
   } catch (err) {
     document.getElementById("login-error").classList.remove("hidden");
   }
 }
 
 // ============================
-// CADASTRO SKIN
+// LOGOUT
+// ============================
+function logout() {
+  localStorage.removeItem("token");
+  document.getElementById("admin-section").classList.add("hidden");
+  document.getElementById("login-section").classList.remove("hidden");
+}
+
+// ============================
+// CARREGAR SKINS NO ADMIN
+// ============================
+async function loadSkinsAdmin() {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  try {
+    const res = await fetch(`${API_URL}/skins`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) throw new Error("Erro ao buscar skins");
+    const skins = await res.json();
+
+    const soldCard = document.getElementById("sold-card");
+    soldCard.innerHTML = "";
+
+    skins.forEach((skin) => {
+      const div = document.createElement("div");
+      div.className = "flex items-center justify-between bg-gray-700 p-2 rounded mb-2";
+      div.innerHTML = `
+        <label class="flex items-center gap-2 w-full cursor-pointer">
+          <input type="checkbox" ${skin.sold ? "checked" : ""} data-id="${skin.id}" class="checkbox-vendido">
+          <span class="truncate">${skin.name} (${skin.condition})</span>
+        </label>
+        <button class="remove-skin bg-red-500 hover:bg-red-400 px-2 py-1 rounded text-sm text-white" data-id="${skin.id}">Remover</button>
+      `;
+      soldCard.appendChild(div);
+    });
+
+    // Adiciona eventos para remover skins
+    document.querySelectorAll(".remove-skin").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const id = btn.dataset.id;
+        if (!confirm("Deseja realmente remover esta skin?")) return;
+
+        try {
+          const res = await fetch(`${API_URL}/skins/${id}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (!res.ok) throw new Error("Erro ao remover skin");
+          loadSkinsAdmin(); // Atualiza lista
+        } catch (err) {
+          alert(err.message);
+        }
+      });
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// ============================
+// CADASTRO DE SKIN
 // ============================
 document.getElementById("skin-form").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -36,7 +98,7 @@ document.getElementById("skin-form").addEventListener("submit", async (e) => {
   const nome = document.getElementById("nome").value;
   const condicao = document.getElementById("condicao").value;
   const categoria = document.getElementById("categoria").value;
-  const float = document.getElementById("float").value || "";
+  const floatValue = document.getElementById("float").value || "";
   const inspectLink = document.getElementById("inspectLink").value;
   const csfloatLink = document.getElementById("csfloatLink").value;
   const whatsappMsg = encodeURIComponent(document.getElementById("whatsappMsg").value);
@@ -50,18 +112,18 @@ document.getElementById("skin-form").addEventListener("submit", async (e) => {
   }
 
   const formData = new FormData();
-  formData.append("nome", nome);
-  formData.append("condicao", condicao);
-  formData.append("categoria", categoria);
-  formData.append("float", float);
+  formData.append("name", nome);
+  formData.append("condition", condicao);
+  formData.append("category", categoria);
+  formData.append("floatValue", floatValue);
   formData.append("inspectLink", inspectLink);
   formData.append("csfloatLink", csfloatLink);
-  formData.append("whatsapp", `https://wa.me/556799288899?text=${whatsappMsg}`);
+  formData.append("whatsappLink", `https://wa.me/556799288899?text=${whatsappMsg}`);
 
   if (imagemUpload) {
-    formData.append("imagem", imagemUpload);
+    formData.append("imageUrl", imagemUpload);
   } else {
-    formData.append("imagem", imagemLink);
+    formData.append("imageUrl", imagemLink);
   }
 
   try {
@@ -78,7 +140,7 @@ document.getElementById("skin-form").addEventListener("submit", async (e) => {
     msgEl.classList.remove("hidden");
     msgEl.classList.replace("text-red-400", "text-green-400");
     e.target.reset();
-    loadSoldSkins(); // atualiza lista de skins vendidas
+    loadSkinsAdmin(); // Atualiza lista imediatamente
   } catch (err) {
     const msgEl = document.getElementById("save-message");
     msgEl.textContent = "❌ Erro ao salvar skin.";
@@ -88,68 +150,7 @@ document.getElementById("skin-form").addEventListener("submit", async (e) => {
 });
 
 // ============================
-// LOGOUT
-// ============================
-function logout() {
-  localStorage.removeItem("token");
-  document.getElementById("admin-section").classList.add("hidden");
-  document.getElementById("login-section").classList.remove("hidden");
-}
-
-// ============================
-// MODAL VENDIDO
-// ============================
-const modalRemover = document.getElementById("modal-remover");
-const btnRemover = document.getElementById("btn-remover");
-const modalCadastrar = document.getElementById("modal-cadastrar");
-const btnCadastrar = document.getElementById("btn-cadastrar");
-
-btnCadastrar.addEventListener("click", () => {
-  modalCadastrar.classList.remove("hidden");
-  modalRemover.classList.add("hidden");
-});
-
-btnRemover.addEventListener("click", () => {
-  modalRemover.classList.remove("hidden");
-  modalCadastrar.classList.add("hidden");
-  loadSoldSkins();
-});
-
-// ============================
-// CARREGAR SKINS PARA MARCAR VENDIDAS
-// ============================
-async function loadSoldSkins() {
-  const token = localStorage.getItem("token");
-  if (!token) return;
-
-  try {
-    const res = await fetch(`${API_URL}/skins`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (!res.ok) throw new Error("Erro ao buscar skins");
-    const skins = await res.json();
-
-    const soldCard = document.getElementById("sold-card");
-    soldCard.innerHTML = "";
-
-    skins.forEach((skin) => {
-      const div = document.createElement("div");
-      div.className = "flex items-center justify-between bg-gray-700 p-2 rounded";
-      div.innerHTML = `
-        <label class="flex items-center gap-2 w-full cursor-pointer">
-          <input type="checkbox" ${skin.vendido ? "checked" : ""} data-id="${skin.id}" class="checkbox-vendido">
-          <span class="truncate">${skin.nome} (${skin.condicao})</span>
-        </label>
-      `;
-      soldCard.appendChild(div);
-    });
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-// ============================
-// ATUALIZAR STATUS VENDIDO
+// ATUALIZAR SKINS VENDIDAS
 // ============================
 document.getElementById("update-sold").addEventListener("click", async () => {
   const token = localStorage.getItem("token");
@@ -159,25 +160,18 @@ document.getElementById("update-sold").addEventListener("click", async () => {
   const updates = [];
 
   checkboxes.forEach((cb) => {
-    updates.push({
-      id: cb.dataset.id,
-      vendido: cb.checked,
-    });
+    updates.push({ id: cb.dataset.id, sold: cb.checked });
   });
 
   try {
     const res = await fetch(`${API_URL}/skins/vendido`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify(updates),
     });
-
     if (!res.ok) throw new Error("Erro ao atualizar skins");
     alert("✅ Skins atualizadas com sucesso!");
-    loadSoldSkins();
+    loadSkinsAdmin();
   } catch (err) {
     console.error(err);
     alert("❌ Erro ao atualizar skins");
