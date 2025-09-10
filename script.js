@@ -1,7 +1,7 @@
 // ============================
 // CONFIG
 // ============================
-const API_URL = "https://lkz-store-backend.onrender.com/"; // URL da API
+const API_URL = "https://lkz-store-backend.onrender.com/";
 
 // ============================
 // ELEMENTOS DOM
@@ -9,6 +9,29 @@ const API_URL = "https://lkz-store-backend.onrender.com/"; // URL da API
 const skinsGrid = document.getElementById("skins-grid");
 const searchInput = document.getElementById("search");
 const categoryButtons = document.querySelectorAll("nav button[data-filter]");
+
+// Botão e modal de marcar como vendida
+const markSoldBtn = document.createElement("button");
+markSoldBtn.textContent = "Marcar Skin como Vendida";
+markSoldBtn.className = "fixed top-24 right-8 bg-yellow-500 hover:bg-yellow-400 text-black px-4 py-2 rounded shadow-lg z-50";
+document.body.appendChild(markSoldBtn);
+
+const soldModal = document.createElement("div");
+soldModal.id = "sold-modal";
+soldModal.className = "fixed inset-0 bg-black/60 flex items-center justify-center hidden z-50";
+soldModal.innerHTML = `
+  <div class="bg-gray-800 p-6 rounded-xl max-w-lg w-full shadow-lg">
+    <h2 class="text-xl font-bold mb-4">Marcar Skins como Vendida</h2>
+    <div id="sold-skins-list" class="flex flex-col gap-2 max-h-96 overflow-y-auto mb-4"></div>
+    <button id="confirm-sold" class="w-full bg-green-500 hover:bg-green-400 py-2 rounded mb-2">Marcar como Vendida</button>
+    <button id="close-sold" class="w-full bg-red-500 hover:bg-red-400 py-2 rounded">Fechar</button>
+  </div>
+`;
+document.body.appendChild(soldModal);
+
+const soldSkinsList = document.getElementById("sold-skins-list");
+const confirmSoldBtn = document.getElementById("confirm-sold");
+const closeSoldBtn = document.getElementById("close-sold");
 
 // ============================
 // FUNÇÃO PARA VERIFICAR SE É MOBILE
@@ -42,7 +65,6 @@ function renderSkins(list) {
     const card = document.createElement("div");
     card.className = `skin-card bg-gray-800 rounded-xl overflow-hidden shadow-md transition flex flex-col ${skin.categoria}`;
 
-    // Cor do float
     let floatColor = "text-white-500";
     if (skin.float !== undefined) {
       if (skin.float <= 0.07) floatColor = "text-blue-400";
@@ -56,62 +78,73 @@ function renderSkins(list) {
 
     card.innerHTML = `
       <div class="skin-card-header">
-        <div class="skin-card-name">${skin.nome}</</div>
+        <div class="skin-card-name">${skin.nome}</div>
         <div class="skin-card-condition">${skin.condicao || ""}</div>
       </div>
-      
       <div class="skin-card-body flex flex-col items-center p-4 relative">
         <img src="${skin.imagem}" alt="${skin.nome}" class="w-32 h-32 object-contain">
-
         ${skin.vendido ? `<div class="ribbon-vendido">VENDIDO</div>` : ""}
-
-        ${
-          skin.float !== undefined
-            ? `<span class="text-sm ${floatColor} mt-2 font-mono">Float: ${skin.float.toFixed(
-                3
-              )}</span>`
-            : '<div class="h-5 mt-2"></div>'
+        ${skin.float !== undefined
+          ? `<span class="text-sm ${floatColor} mt-2 font-mono">Float: ${skin.float.toFixed(3)}</span>`
+          : '<div class="h-5 mt-2"></div>'
         }
       </div>
-
       <div class="skin-card-footer">
         <div class="flex gap-2 w-full justify-center">
-          ${
-            skin.inspectLink
-              ? `<a href="${skin.inspectLink}" class="bg-blue-500 hover:bg-blue-400 text-white px-2 py-1 rounded flex items-center gap-1 transition-colors text-sm" target="_blank">
-              <i class="fa fa-eye text-xs"></i> ${
-                isMobileView ? "" : '<span class="hidden sm:inline text-xs">Inspecionar</span>'
-              }
-            </a>`
-              : ""
-          }
-          
-          ${
-            skin.csfloatLink
-              ? `<a href="${skin.csfloatLink}" class="bg-indigo-500 hover:bg-indigo-400 text-white px-2 py-1 rounded flex items-center gap-1 transition-colors text-sm" target="_blank">
-              <i class="fa fa-external-link text-xs"></i> ${
-                isMobileView ? "" : '<span class="hidden sm:inline text-xs">CSFloat</span>'
-              }
-            </a>`
-              : ""
-          }
-
-          ${
-            skin.whatsapp
-              ? `<a href="${skin.whatsapp}" class="bg-green-500 hover:bg-green-400 text-white px-2 py-1 rounded flex items-center gap-1 transition-colors text-sm" target="_blank">
-              <i class="fa-brands fa-whatsapp text-xs"></i> ${
-                isMobileView ? "" : '<span class="hidden sm:inline text-xs">WhatsApp</span>'
-              }
-            </a>`
-              : ""
-          }
+          ${skin.inspectLink ? `<a href="${skin.inspectLink}" class="bg-blue-500 hover:bg-blue-400 text-white px-2 py-1 rounded flex items-center gap-1 transition-colors text-sm" target="_blank"><i class="fa fa-eye text-xs"></i> ${isMobileView ? "" : '<span class="hidden sm:inline text-xs">Inspecionar</span>'}</a>` : ""}
+          ${skin.csfloatLink ? `<a href="${skin.csfloatLink}" class="bg-indigo-500 hover:bg-indigo-400 text-white px-2 py-1 rounded flex items-center gap-1 transition-colors text-sm" target="_blank"><i class="fa fa-external-link text-xs"></i> ${isMobileView ? "" : '<span class="hidden sm:inline text-xs">CSFloat</span>'}</a>` : ""}
+          ${skin.whatsapp ? `<a href="${skin.whatsapp}" class="bg-green-500 hover:bg-green-400 text-white px-2 py-1 rounded flex items-center gap-1 transition-colors text-sm" target="_blank"><i class="fa-brands fa-whatsapp text-xs"></i> ${isMobileView ? "" : '<span class="hidden sm:inline text-xs">WhatsApp</span>'}</a>` : ""}
         </div>
       </div>
     `;
-
     skinsGrid.appendChild(card);
   });
 }
+
+// ============================
+// MODAL MARCAR VENDIDA
+// ============================
+function openSoldModal() {
+  soldSkinsList.innerHTML = "";
+  allSkins.forEach((skin) => {
+    const item = document.createElement("div");
+    item.className = "flex items-center justify-between p-2 bg-gray-700 rounded";
+    item.innerHTML = `
+      <label class="flex items-center gap-2">
+        <input type="checkbox" value="${skin.id}" ${skin.vendido ? "checked disabled" : ""}>
+        <span>${skin.nome} (${skin.condicao})</span>
+      </label>
+    `;
+    soldSkinsList.appendChild(item);
+  });
+  soldModal.classList.remove("hidden");
+}
+
+markSoldBtn.addEventListener("click", openSoldModal);
+closeSoldBtn.addEventListener("click", () => soldModal.classList.add("hidden"));
+
+// Confirmar venda
+confirmSoldBtn.addEventListener("click", async () => {
+  const selected = [...soldSkinsList.querySelectorAll("input[type=checkbox]:not(:disabled):checked")].map(input => input.value);
+  if (!selected.length) return alert("Selecione ao menos uma skin.");
+
+  try {
+    const token = localStorage.getItem("token");
+    const res = await fetch(`${API_URL}/skins/mark-sold`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ ids: selected }),
+    });
+    if (!res.ok) throw new Error("Erro ao marcar skins como vendida");
+    soldModal.classList.add("hidden");
+    await fetchSkins(); // Recarrega as skins
+  } catch (err) {
+    alert(err.message);
+  }
+});
 
 // ============================
 // FETCH DAS SKINS DA API

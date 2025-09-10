@@ -8,9 +8,9 @@
 </head>
 <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
 
-  <div class="w-full max-w-md bg-gray-800 p-6 rounded-xl shadow-md">
+  <div class="w-full max-w-md">
     <!-- LOGIN -->
-    <div id="login-section">
+    <div id="login-section" class="bg-gray-800 p-6 rounded-xl shadow-md">
       <h2 class="text-xl font-bold mb-4">Login Admin</h2>
       <input id="username" type="text" placeholder="Usuário" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
       <input id="password" type="password" placeholder="Senha" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
@@ -19,99 +19,87 @@
     </div>
 
     <!-- ADMIN -->
-    <div id="admin-section" class="hidden">
-      <h2 class="text-xl font-bold mb-4">Cadastrar Skin</h2>
-      <form id="skin-form" class="flex flex-col gap-3">
-        <input id="nome" type="text" placeholder="Nome da Skin" class="p-2 rounded bg-gray-700 text-white">
-        <input id="condicao" type="text" placeholder="Condição (ex: Factory New)" class="p-2 rounded bg-gray-700 text-white">
-        <input id="imagem" type="text" placeholder="URL da Imagem" class="p-2 rounded bg-gray-700 text-white">
-        <input id="float" type="number" step="0.0001" placeholder="Float (opcional)" class="p-2 rounded bg-gray-700 text-white">
-        <input id="categoria" type="text" placeholder="Categoria (Facas, Rifles...)" class="p-2 rounded bg-gray-700 text-white">
-        <input id="inspectLink" type="text" placeholder="Link Inspect (opcional)" class="p-2 rounded bg-gray-700 text-white">
-        <input id="csfloatLink" type="text" placeholder="Link CSFloat (opcional)" class="p-2 rounded bg-gray-700 text-white">
-        <input id="whatsapp" type="text" placeholder="Link WhatsApp (opcional)" class="p-2 rounded bg-gray-700 text-white">
-        <button type="submit" class="w-full bg-green-500 hover:bg-green-400 py-2 rounded">Salvar Skin</button>
-      </form>
-      <p id="save-message" class="text-sm mt-3 hidden"></p>
+    <div id="admin-section" class="hidden flex flex-col gap-4">
+      <!-- BOTÕES MODAL -->
+      <div class="flex gap-2">
+        <button id="btn-cadastrar" class="flex-1 bg-green-500 hover:bg-green-400 py-2 rounded">Cadastrar Skin</button>
+        <button id="btn-remover" class="flex-1 bg-yellow-500 hover:bg-yellow-400 py-2 rounded">Marcar/Remover Skin</button>
+      </div>
+
+      <!-- MODAL CADASTRO -->
+      <div id="modal-cadastrar" class="bg-gray-800 p-6 rounded-xl shadow-md">
+        <h2 class="text-xl font-bold mb-4">Cadastrar Skin</h2>
+        <form id="skin-form" class="flex flex-col gap-3" enctype="multipart/form-data">
+          <input id="nome" type="text" placeholder="Nome da Skin" class="p-2 rounded bg-gray-700 text-white">
+
+          <select id="condicao" class="p-2 rounded bg-gray-700 text-white">
+            <option value="" disabled selected>Selecione a condição</option>
+            <option value="Factory New">Factory New</option>
+            <option value="Minimal Wear">Minimal Wear</option>
+            <option value="Field-Tested">Field-Tested</option>
+            <option value="Well-Worn">Well-Worn</option>
+            <option value="Battle-Scarred">Battle-Scarred</option>
+          </select>
+
+          <select id="categoria" class="p-2 rounded bg-gray-700 text-white">
+            <option value="" disabled selected>Selecione a categoria</option>
+            <option value="Facas">Facas</option>
+            <option value="Luvas">Luvas</option>
+            <option value="Pistolas">Pistolas</option>
+            <option value="Rifles">Rifles</option>
+            <option value="SMGs">SMGs</option>
+            <option value="Pesadas">Pesadas</option>
+            <option value="Adesivos">Adesivos</option>
+            <option value="Agentes">Agentes</option>
+            <option value="Caixas">Caixas</option>
+            <option value="Outros">Outros</option>
+          </select>
+
+          <input id="imagemLink" type="text" placeholder="Link da Imagem (ex: Imgur)" class="p-2 rounded bg-gray-700 text-white">
+          <input id="imagemUpload" type="file" accept="image/*" class="p-2 rounded bg-gray-700 text-white">
+
+          <input id="float" type="number" step="0.0001" placeholder="Float (opcional)" class="p-2 rounded bg-gray-700 text-white">
+          <input id="inspectLink" type="text" placeholder="Link Inspect (opcional)" class="p-2 rounded bg-gray-700 text-white">
+          <input id="csfloatLink" type="text" placeholder="Link CSFloat (opcional)" class="p-2 rounded bg-gray-700 text-white">
+          <input id="whatsappMsg" type="text" placeholder="Mensagem WhatsApp" class="p-2 rounded bg-gray-700 text-white">
+
+          <button type="submit" class="w-full bg-green-500 hover:bg-green-400 py-2 rounded">Salvar Skin</button>
+        </form>
+        <p id="save-message" class="text-sm mt-3 hidden"></p>
+      </div>
+
+      <!-- MODAL REMOVER / VENDIDO -->
+      <div id="modal-remover" class="hidden bg-gray-800 p-6 rounded-xl shadow-md">
+        <h2 class="text-xl font-bold mb-4">Marcar/Remover Skin Vendida</h2>
+        <div id="sold-card" class="max-h-96 overflow-y-auto flex flex-col gap-2"></div>
+        <button id="update-sold" class="w-full bg-yellow-500 hover:bg-yellow-400 py-2 rounded mt-2">Atualizar Venda</button>
+      </div>
+
       <button onclick="logout()" class="mt-4 w-full bg-red-500 hover:bg-red-400 py-2 rounded">Sair</button>
     </div>
   </div>
 
-  <script>
-    const API_URL = "https://lkz-store-backend.onrender.com"; // coloca a URL do teu backend
+<script src="admin.js"></script>
+<script>
+  // BOTÕES MODAL
+  const btnCadastrar = document.getElementById("btn-cadastrar");
+  const btnRemover = document.getElementById("btn-remover");
+  const modalCadastrar = document.getElementById("modal-cadastrar");
+  const modalRemover = document.getElementById("modal-remover");
 
-    // LOGIN
-    async function login() {
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
+  btnCadastrar.addEventListener("click", () => {
+    modalCadastrar.classList.remove("hidden");
+    modalRemover.classList.add("hidden");
+  });
 
-      try {
-        const res = await fetch(`${API_URL}/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password }),
-        });
+  btnRemover.addEventListener("click", () => {
+    modalRemover.classList.remove("hidden");
+    modalCadastrar.classList.add("hidden");
+  });
 
-        if (!res.ok) throw new Error("Login inválido");
-
-        const data = await res.json();
-        localStorage.setItem("token", data.token);
-
-        document.getElementById("login-section").classList.add("hidden");
-        document.getElementById("admin-section").classList.remove("hidden");
-      } catch (err) {
-        document.getElementById("login-error").classList.remove("hidden");
-      }
-    }
-
-    // CADASTRO SKIN
-    document.getElementById("skin-form").addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const token = localStorage.getItem("token");
-      if (!token) return alert("Faça login novamente.");
-
-      const skin = {
-        nome: document.getElementById("nome").value,
-        condicao: document.getElementById("condicao").value,
-        imagem: document.getElementById("imagem").value,
-        float: document.getElementById("float").value ? parseFloat(document.getElementById("float").value) : null,
-        categoria: document.getElementById("categoria").value,
-        inspectLink: document.getElementById("inspectLink").value,
-        csfloatLink: document.getElementById("csfloatLink").value,
-        whatsapp: document.getElementById("whatsapp").value,
-      };
-
-      try {
-        const res = await fetch(`${API_URL}/skins`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(skin),
-        });
-
-        if (!res.ok) throw new Error("Erro ao salvar");
-
-        document.getElementById("save-message").textContent = "✅ Skin cadastrada com sucesso!";
-        document.getElementById("save-message").classList.remove("hidden");
-        document.getElementById("save-message").classList.add("text-green-400");
-
-        e.target.reset();
-      } catch (err) {
-        document.getElementById("save-message").textContent = "❌ Erro ao salvar skin.";
-        document.getElementById("save-message").classList.remove("hidden");
-        document.getElementById("save-message").classList.add("text-red-400");
-      }
-    });
-
-    // LOGOUT
-    function logout() {
-      localStorage.removeItem("token");
-      document.getElementById("admin-section").classList.add("hidden");
-      document.getElementById("login-section").classList.remove("hidden");
-    }
-  </script>
+  // abrir cadastro por padrão
+  modalCadastrar.classList.remove("hidden");
+</script>
 </body>
 </html>
+
