@@ -109,16 +109,16 @@ document.getElementById("skin-form").addEventListener("submit", async (e) => {
   if (!imageUrl && !imageUpload) return alert("Preencha o link da imagem ou faça upload da imagem.");
 
   const formData = new FormData();
-  formData.append("nome", name);
-  formData.append("condicao", condition);
-  formData.append("categoria", category);
-  formData.append("float", floatValue);
+  formData.append("name", name);
+  formData.append("condition", condition);
+  formData.append("category", category);
+  formData.append("floatValue", floatValue);
   formData.append("inspectLink", inspectLink);
   formData.append("csfloatLink", csfloatLink);
   formData.append("whatsapp", `https://wa.me/556799288899?text=${whatsappMsg}`);
 
-  if (imageUpload) formData.append("imagem", imageUpload);
-  else formData.append("imagem", imageUrl);
+  if (imageUpload) formData.append("image", imageUpload);
+  else formData.append("image", imageUrl);
 
   try {
     const res = await fetch(`${API_URL}/skins`, {
@@ -142,6 +142,7 @@ document.getElementById("skin-form").addEventListener("submit", async (e) => {
     msgEl.classList.replace("text-green-400", "text-red-400");
   }
 });
+
 
 
 // ============================
