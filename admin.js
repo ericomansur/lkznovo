@@ -1,7 +1,7 @@
 // ============================
 // CONFIG
 // ============================
-const API_URL = "https://lkz-store-backend.onrender.com/";
+const API_URL = "https://lkz-store-backend.onrender.com";
 
 // ============================
 // ELEMENTOS DOM
