@@ -64,7 +64,7 @@ async function loadSkinsAdmin() {
       soldCard.appendChild(div);
     });
 
-    // Adiciona eventos para remover skins
+    // Eventos para remover skins
     document.querySelectorAll(".remove-skin").forEach((btn) => {
       btn.addEventListener("click", async () => {
         const id = btn.dataset.id;
@@ -120,11 +120,8 @@ document.getElementById("skin-form").addEventListener("submit", async (e) => {
   formData.append("csfloatLink", csfloatLink);
   formData.append("whatsappLink", `https://wa.me/556799288899?text=${whatsappMsg}`);
 
-  if (imagemUpload) {
-    formData.append("imageUrl", imagemUpload);
-  } else {
-    formData.append("imageUrl", imagemLink);
-  }
+  if (imagemUpload) formData.append("imageUrl", imagemUpload);
+  else formData.append("imageUrl", imagemLink);
 
   try {
     const res = await fetch(`${API_URL}/skins`, {
@@ -140,7 +137,7 @@ document.getElementById("skin-form").addEventListener("submit", async (e) => {
     msgEl.classList.remove("hidden");
     msgEl.classList.replace("text-red-400", "text-green-400");
     e.target.reset();
-    loadSkinsAdmin(); // Atualiza lista imediatamente
+    loadSkinsAdmin();
   } catch (err) {
     const msgEl = document.getElementById("save-message");
     msgEl.textContent = "❌ Erro ao salvar skin.";

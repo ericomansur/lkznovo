@@ -10,29 +10,6 @@ const skinsGrid = document.getElementById("skins-grid");
 const searchInput = document.getElementById("search");
 const categoryButtons = document.querySelectorAll("nav button[data-filter]");
 
-// Botão e modal de marcar como vendida
-const markSoldBtn = document.createElement("button");
-markSoldBtn.textContent = "Marcar Skin como Vendida";
-markSoldBtn.className =
-  "fixed top-24 right-8 bg-yellow-500 hover:bg-yellow-400 text-black px-4 py-2 rounded shadow-lg z-50";
-document.body.appendChild(markSoldBtn);
-
-const soldModal = document.createElement("div");
-soldModal.id = "sold-modal";
-soldModal.className = "fixed inset-0 bg-black/60 flex items-center justify-center hidden z-50";
-soldModal.innerHTML = `
-  <div class="bg-gray-800 p-6 rounded-xl max-w-lg w-full shadow-lg">
-    <div id="sold-skins-list" class="flex flex-col gap-2 max-h-96 overflow-y-auto mb-4"></div>
-    <button id="confirm-sold" class="w-full bg-green-500 hover:bg-green-400 py-2 rounded mb-2">Marcar como Vendida</button>
-    <button id="close-sold" class="w-full bg-red-500 hover:bg-red-400 py-2 rounded">Fechar</button>
-  </div>
-`;
-document.body.appendChild(soldModal);
-
-const soldSkinsList = document.getElementById("sold-skins-list");
-const confirmSoldBtn = document.getElementById("confirm-sold");
-const closeSoldBtn = document.getElementById("close-sold");
-
 // ============================
 // FUNÇÃO PARA VERIFICAR SE É MOBILE
 // ============================
@@ -100,51 +77,6 @@ function renderSkins(list) {
     skinsGrid.appendChild(card);
   });
 }
-
-// ============================
-// MODAL MARCAR VENDIDA
-// ============================
-function openSoldModal() {
-  soldSkinsList.innerHTML = "";
-  allSkins.forEach((skin) => {
-    const item = document.createElement("div");
-    item.className = "flex items-center justify-between p-2 bg-gray-700 rounded";
-    item.innerHTML = `
-      <label class="flex items-center gap-2">
-        <input type="checkbox" value="${skin.id}" ${skin.sold ? "checked disabled" : ""}>
-        <span>${skin.name} (${skin.condition})</span>
-      </label>
-    `;
-    soldSkinsList.appendChild(item);
-  });
-  soldModal.classList.remove("hidden");
-}
-
-markSoldBtn.addEventListener("click", openSoldModal);
-closeSoldBtn.addEventListener("click", () => soldModal.classList.add("hidden"));
-
-// Confirmar venda
-confirmSoldBtn.addEventListener("click", async () => {
-  const selected = [...soldSkinsList.querySelectorAll("input[type=checkbox]:not(:disabled):checked")].map(input => input.value);
-  if (!selected.length) return alert("Selecione ao menos uma skin.");
-
-  try {
-    const token = localStorage.getItem("token");
-    const res = await fetch(`${API_URL}/skins/mark-sold`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ ids: selected }),
-    });
-    if (!res.ok) throw new Error("Erro ao marcar skins como vendida");
-    soldModal.classList.add("hidden");
-    await fetchSkins(); // Recarrega as skins
-  } catch (err) {
-    alert(err.message);
-  }
-});
 
 // ============================
 // FETCH DAS SKINS DA API
