@@ -1,7 +1,8 @@
 // ============================
 // CONFIG
 // ============================
-const API_URL = "https://lkz-store-backend.onrender.com/"; // Verifique se esta URL está correta
+// Use a URL primária do seu serviço no Render
+const API_URL = "https://lkz-store-backend.onrender.com"; 
 
 // ============================
 // ELEMENTOS DOM
@@ -23,7 +24,7 @@ function isMobile() {
 function renderSkins(list) {
   skinsGrid.innerHTML = ""; // Limpa o grid antes de renderizar
 
-  if (!list || list.length === 0) { // Verifica se a lista é null, undefined ou vazia
+  if (!list.length) {
     const emptyMessage = document.createElement("div");
     emptyMessage.className =
       "col-span-full text-center text-gray-400 text-lg mt-10 flex flex-col items-center justify-center";
@@ -42,7 +43,7 @@ function renderSkins(list) {
 
   list.forEach((skin) => {
     const card = document.createElement("div");
-    // Adiciona a classe da categoria para possível filtragem CSS/JS adicional
+    // Adiciona a classe da categoria para futuras manipulações com filtros
     card.className = `skin-card bg-gray-800 rounded-xl overflow-hidden shadow-md transition flex flex-col ${skin.category}`;
 
     let floatColor = "text-white";
@@ -55,9 +56,8 @@ function renderSkins(list) {
       else floatColor = "text-red-500";
     }
 
-    // A imagem deve ser referenciada pela propriedade correta enviada pela API
-    // A API agora retorna 'imageUrl', então vamos usá-la. Se a imagem for um path relativo no servidor, o server.js precisa servir a pasta 'uploads'.
-    const imageSrc = skin.imageUrl || skin.image || ""; // Usa imageUrl primeiro, depois image
+    // Usa skin.imageUrl que é retornado pela API
+    const imageSrc = skin.imageUrl || skin.image || ""; 
 
     card.innerHTML = `
       <div class="skin-card-header">
@@ -69,14 +69,14 @@ function renderSkins(list) {
         ${skin.sold ? `<div class="ribbon-vendido">VENDIDO</div>` : ""}
         ${!isNaN(floatValue)
           ? `<span class="text-sm ${floatColor} mt-2 font-mono">Float: ${floatValue.toFixed(3)}</span>`
-          : '<div class="h-5 mt-2"></div>' // Espaço reservado se não houver float
+          : '<div class="h-5 mt-2"></div>' // Espaço reservado para manter o layout
         }
       </div>
       <div class="skin-card-footer">
         <div class="flex gap-2 w-full justify-center">
           ${skin.inspectLink ? `<a href="${skin.inspectLink}" class="bg-blue-500 hover:bg-blue-400 text-white px-2 py-1 rounded flex items-center gap-1 transition-colors text-sm" target="_blank"><i class="fa fa-eye text-xs"></i> ${mobileView ? "" : '<span class="hidden sm:inline text-xs">Inspecionar</span>'}</a>` : ""}
           ${skin.csfloatLink ? `<a href="${skin.csfloatLink}" class="bg-indigo-500 hover:bg-indigo-400 text-white px-2 py-1 rounded flex items-center gap-1 transition-colors text-sm" target="_blank"><i class="fa fa-external-link text-xs"></i> ${mobileView ? "" : '<span class="hidden sm:inline text-xs">CSFloat</span>'}</a>` : ""}
-          ${skin.whatsappLink ? `<a href="${skin.whatsappLink}" class="bg-green-500 hover:bg-green-400 text-white px-2 py-1 rounded flex items-center gap-1 transition-colors text-sm" target="_blank"><i class="fa-brands fa-whatsapp text-xs"></i> ${mobileView ? "" : '<span class="hidden sm:inline text-xs">WhatsApp</span>'}</a>` : ""}
+          ${skin.whatsapp ? `<a href="${skin.whatsapp}" class="bg-green-500 hover:bg-green-400 text-white px-2 py-1 rounded flex items-center gap-1 transition-colors text-sm" target="_blank"><i class="fa-brands fa-whatsapp text-xs"></i> ${mobileView ? "" : '<span class="hidden sm:inline text-xs">WhatsApp</span>'}</a>` : ""}
         </div>
       </div>
     `;
@@ -91,26 +91,21 @@ let allSkins = [];
 
 async function fetchSkins() {
   try {
+    // Certifique-se de que a URL da API está correta e acessível
     const res = await fetch(`${API_URL}/skins`);
     if (!res.ok) {
-        // Verifica se o erro é de rede ou do servidor
-        if (res.status === 404) {
-            throw new Error("Servidor de skins não encontrado (404)");
-        } else if (res.status === 500) {
-            throw new Error("Erro interno no servidor ao buscar skins (500)");
-        } else {
-            throw new Error(`Erro ao buscar skins (${res.status})`);
-        }
+      // Verifica o status da resposta para identificar o erro 404
+      if (res.status === 404) {
+        throw new Error(`Endpoint de skins não encontrado (404). Verifique a URL da API: ${API_URL}`);
+      }
+      throw new Error(`Erro ao buscar skins (${res.status})`);
     }
-    
     allSkins = await res.json();
-    // Aplica os filtros e busca apenas após carregar todas as skins
-    applyFiltersAndSearch(); 
-
+    applyFiltersAndSearch(); // Aplica filtros e busca após carregar as skins
   } catch (err) {
     console.error("Erro ao buscar skins:", err);
-    // Exibe uma mensagem de erro mais amigável no grid
-    skinsGrid.innerHTML = `<div class="col-span-full text-center text-red-400 mt-10">Erro ao carregar skins. Por favor, verifique a conexão ou tente mais tarde. (${err.message})</div>`;
+    // Mostra uma mensagem de erro mais informativa para o usuário
+    skinsGrid.innerHTML = `<div class="col-span-full text-center text-red-400 mt-10">${err.message}. Por favor, verifique a conexão ou tente mais tarde.</div>`;
   }
 }
 
@@ -121,19 +116,20 @@ let currentCategory = "all";
 let currentSearch = "";
 
 function applyFiltersAndSearch() {
-  let filtered = [...allSkins]; // Cria uma cópia para não modificar o array original
+  let filtered = allSkins;
 
-  // Filtra por categoria, ignorando maiúsculas/minúsculas
+  // Filtro por categoria
   if (currentCategory !== "all") {
-    filtered = filtered.filter(s => s.category && s.category.toLowerCase() === currentCategory.toLowerCase());
+    // Compara a categoria da skin (em minúsculas) com a categoria atual
+    filtered = filtered.filter(s => (s.category || "").toLowerCase() === currentCategory.toLowerCase());
   }
 
-  // Filtra por nome, ignorando maiúsculas/minúsculas
+  // Filtro por busca de nome
   if (currentSearch) {
-    filtered = filtered.filter(s => s.name && s.name.toLowerCase().includes(currentSearch.toLowerCase()));
+    filtered = filtered.filter(s => (s.name || "").toLowerCase().includes(currentSearch.toLowerCase()));
   }
 
-  renderSkins(filtered);
+  renderSkins(filtered); // Renderiza as skins filtradas
 }
 
 // ============================
@@ -141,17 +137,13 @@ function applyFiltersAndSearch() {
 // ============================
 categoryButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
-    // Remove classes de todos os botões, depois adiciona ao clicado
-    categoryButtons.forEach((b) => {
-      b.classList.remove("active", "bg-blue-500");
-      b.classList.add("bg-gray-700"); // Volta para a cor padrão
-    });
-    
-    btn.classList.add("active", "bg-blue-500"); // Adiciona as classes ativas
-    btn.classList.remove("bg-gray-700"); // Remove a cor padrão quando ativo
-
+    // Remove classes de todos os botões para resetar o estilo
+    categoryButtons.forEach((b) => b.classList.remove("active", "bg-blue-500"));
+    // Adiciona classes ao botão clicado
+    btn.classList.add("active", "bg-blue-500");
+    // Atualiza a categoria atual
     currentCategory = btn.getAttribute("data-filter") || "all";
-    applyFiltersAndSearch();
+    applyFiltersAndSearch(); // Aplica os filtros
   });
 });
 
@@ -159,16 +151,15 @@ categoryButtons.forEach((btn) => {
 // EVENTO DE BUSCA
 // ============================
 searchInput.addEventListener("input", (e) => {
-  currentSearch = e.target.value || "";
-  applyFiltersAndSearch();
+  currentSearch = e.target.value || ""; // Pega o valor do input, ou string vazia se for nulo/undefined
+  applyFiltersAndSearch(); // Aplica os filtros (incluindo a busca)
 });
 
 // ============================
 // INICIALIZAÇÃO
 // ============================
 document.addEventListener("DOMContentLoaded", () => {
-  fetchSkins(); // Carrega as skins quando a página é carregada
-  // O evento de redimensionamento não afeta diretamente a exibição das skins neste script,
-  // mas pode ser útil se houver elementos responsivos adicionais.
-  // window.addEventListener("resize", () => applyFiltersAndSearch()); 
+  fetchSkins(); // Carrega as skins quando a página é totalmente carregada
+  // Adiciona um listener para redimensionamento da janela para otimizar a exibição em mobile/desktop
+  window.addEventListener("resize", () => applyFiltersAndSearch()); 
 });
