@@ -1,106 +1,97 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin - LKZ Store</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/ffffff/admin-settings-male.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - LKZ Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/ffffff/admin-settings-male.png">
 </head>
 <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
 
-  <div class="w-full max-w-md">
-    <!-- LOGIN -->
-    <div id="login-section" class="bg-gray-800 p-6 rounded-xl shadow-md">
-      <h2 class="text-xl font-bold mb-4">Login Admin</h2>
-      <input id="username" type="text" placeholder="Usuário" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-      <input id="password" type="password" placeholder="Senha" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-      <button onclick="login()" class="w-full bg-blue-500 hover:bg-blue-400 text-white py-2 rounded">Entrar</button>
-      <p id="login-error" class="text-red-500 text-sm mt-2 hidden">Usuário ou senha inválidos</p>
+    <div class="w-full max-w-7xl px-4">
+        <div id="login-section" class="bg-gray-800 p-6 rounded-xl shadow-md max-w-md mx-auto">
+            <h2 class="text-xl font-bold mb-4">Login Admin</h2>
+            <input id="username" type="text" placeholder="Usuário" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
+            <input id="password" type="password" placeholder="Senha" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
+            <button onclick="login()" class="w-full bg-blue-500 hover:bg-blue-400 text-white py-2 rounded">Entrar</button>
+            <p id="login-error" class="text-red-500 text-sm mt-2 hidden">Usuário ou senha inválidos</p>
+        </div>
+
+        <div id="admin-section" class="hidden flex flex-col gap-4">
+            <div class="flex gap-2 justify-center">
+                <button id="btn-cadastrar" class="flex-1 max-w-xs bg-green-500 hover:bg-green-400 py-2 rounded">Cadastrar Skin</button>
+                <button id="btn-remover" class="flex-1 max-w-xs bg-yellow-500 hover:bg-yellow-400 py-2 rounded">Marcar/Remover Skin</button>
+            </div>
+
+            <div id="modal-cadastrar" class="bg-gray-800 p-6 rounded-xl shadow-md max-w-md mx-auto">
+                <h2 class="text-xl font-bold mb-4">Cadastrar Skin</h2>
+                <form id="skin-form" class="flex flex-col gap-3" enctype="multipart/form-data">
+                    <input id="nome" type="text" placeholder="Nome da Skin" class="p-2 rounded bg-gray-700 text-white">
+                    <select id="condicao" class="p-2 rounded bg-gray-700 text-white">
+                        <option value="" disabled selected>Selecione a condição</option>
+                        <option value="Factory New">Factory New</option>
+                        <option value="Minimal Wear">Minimal Wear</option>
+                        <option value="Field-Tested">Field-Tested</option>
+                        <option value="Well-Worn">Well-Worn</option>
+                        <option value="Battle-Scarred">Battle-Scarred</option>
+                    </select>
+                    <select id="categoria" class="p-2 rounded bg-gray-700 text-white">
+                        <option value="" disabled selected>Selecione a categoria</option>
+                        <option value="knives">Knives</option>
+                        <option value="gloves">Gloves</option>
+                        <option value="pistols">Pistols</option>
+                        <option value="rifles">Rifles</option>
+                        <option value="smgs">SMGs</option>
+                        <option value="heavy">Heavy</option>
+                        <option value="stickers">Stickers</option>
+                        <option value="agents">Agents</option>
+                        <option value="cases">Cases</option>
+                        <option value="others">Others</option>
+                    </select>
+                    <input id="imagemLink" type="text" placeholder="Link da Imagem (ex: Imgur)" class="p-2 rounded bg-gray-700 text-white">
+                    <input id="imagemUpload" type="file" accept="image/*" class="p-2 rounded bg-gray-700 text-white">
+                    <input id="float" type="number" step="0.0001" placeholder="Float (opcional)" class="p-2 rounded bg-gray-700 text-white">
+                    <input id="inspectLink" type="text" placeholder="Link Inspect (opcional)" class="p-2 rounded bg-gray-700 text-white">
+                    <input id="csfloatLink" type="text" placeholder="Link CSFloat (opcional)" class="p-2 rounded bg-gray-700 text-white">
+                    <input id="whatsappMsg" type="text" placeholder="Mensagem WhatsApp" class="p-2 rounded bg-gray-700 text-white">
+                    <button type="submit" class="w-full bg-green-500 hover:bg-green-400 py-2 rounded">Salvar Skin</button>
+                </form>
+                <p id="save-message" class="text-sm mt-3 hidden"></p>
+            </div>
+
+            <div id="modal-remover" class="hidden bg-gray-800 p-6 rounded-xl shadow-md w-full">
+                <h2 class="text-xl font-bold mb-4">Gerenciar Skins</h2>
+                <div id="sold-card" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 max-h-[80vh] overflow-y-auto pr-2">
+                </div>
+                <button id="update-sold" class="w-full bg-yellow-500 hover:bg-yellow-400 py-2 rounded mt-4">Atualizar Vendas</button>
+            </div>
+
+            <button onclick="logout()" class="mt-4 w-full max-w-md mx-auto bg-red-500 hover:bg-red-400 py-2 rounded">Sair</button>
+        </div>
     </div>
 
-    <!-- ADMIN -->
-    <div id="admin-section" class="hidden flex flex-col gap-4">
-      <!-- BOTÕES MODAL -->
-      <div class="flex gap-2">
-        <button id="btn-cadastrar" class="flex-1 bg-green-500 hover:bg-green-400 py-2 rounded">Cadastrar Skin</button>
-        <button id="btn-remover" class="flex-1 bg-yellow-500 hover:bg-yellow-400 py-2 rounded">Marcar/Remover Skin</button>
-      </div>
+    <script src="admin.js"></script>
+    <script>
+        // BOTÕES MODAL
+        const btnCadastrar = document.getElementById("btn-cadastrar");
+        const btnRemover = document.getElementById("btn-remover");
+        const modalCadastrar = document.getElementById("modal-cadastrar");
+        const modalRemover = document.getElementById("modal-remover");
 
-      <!-- MODAL CADASTRO -->
-      <div id="modal-cadastrar" class="bg-gray-800 p-6 rounded-xl shadow-md">
-        <h2 class="text-xl font-bold mb-4">Cadastrar Skin</h2>
-        <form id="skin-form" class="flex flex-col gap-3" enctype="multipart/form-data">
-          <input id="nome" type="text" placeholder="Nome da Skin" class="p-2 rounded bg-gray-700 text-white">
+        btnCadastrar.addEventListener("click", () => {
+            modalCadastrar.classList.remove("hidden");
+            modalRemover.classList.add("hidden");
+        });
 
-          <select id="condicao" class="p-2 rounded bg-gray-700 text-white">
-            <option value="" disabled selected>Selecione a condição</option>
-            <option value="Factory New">Factory New</option>
-            <option value="Minimal Wear">Minimal Wear</option>
-            <option value="Field-Tested">Field-Tested</option>
-            <option value="Well-Worn">Well-Worn</option>
-            <option value="Battle-Scarred">Battle-Scarred</option>
-          </select>
+        btnRemover.addEventListener("click", () => {
+            modalRemover.classList.remove("hidden");
+            modalCadastrar.classList.add("hidden");
+            loadSkinsAdmin();
+        });
 
-          <select id="categoria" class="p-2 rounded bg-gray-700 text-white">
-            <option value="" disabled selected>Selecione a categoria</option>
-            <option value="knives">Knives</option>
-            <option value="gloves">Gloves</option>
-            <option value="pistols">Pistols</option>
-            <option value="rifles">Rifles</option>
-            <option value="smgs">SMGs</option>
-            <option value="heavy">Heavy</option>
-            <option value="stickers">Stickers</option>
-            <option value="agents">Agents</option>
-            <option value="cases">Cases</option>
-            <option value="others">Others</option>
-          </select>
-
-          <input id="imagemLink" type="text" placeholder="Link da Imagem (ex: Imgur)" class="p-2 rounded bg-gray-700 text-white">
-          <input id="imagemUpload" type="file" accept="image/*" class="p-2 rounded bg-gray-700 text-white">
-
-          <input id="float" type="number" step="0.0001" placeholder="Float (opcional)" class="p-2 rounded bg-gray-700 text-white">
-          <input id="inspectLink" type="text" placeholder="Link Inspect (opcional)" class="p-2 rounded bg-gray-700 text-white">
-          <input id="csfloatLink" type="text" placeholder="Link CSFloat (opcional)" class="p-2 rounded bg-gray-700 text-white">
-          <input id="whatsappMsg" type="text" placeholder="Mensagem WhatsApp" class="p-2 rounded bg-gray-700 text-white">
-
-          <button type="submit" class="w-full bg-green-500 hover:bg-green-400 py-2 rounded">Salvar Skin</button>
-        </form>
-        <p id="save-message" class="text-sm mt-3 hidden"></p>
-      </div>
-
-      <!-- MODAL REMOVER / VENDIDO -->
-      <div id="modal-remover" class="hidden bg-gray-800 p-6 rounded-xl shadow-md">
-        <h2 class="text-xl font-bold mb-4">Marcar/Remover Skin Vendida</h2>
-        <div id="sold-card" class="max-h-96 overflow-y-auto flex flex-col gap-2"></div>
-        <button id="update-sold" class="w-full bg-yellow-500 hover:bg-yellow-400 py-2 rounded mt-2">Atualizar Venda</button>
-      </div>
-
-      <button onclick="logout()" class="mt-4 w-full bg-red-500 hover:bg-red-400 py-2 rounded">Sair</button>
-    </div>
-  </div>
-
-<script src="admin.js"></script>
-<script>
-  // BOTÕES MODAL
-  const btnCadastrar = document.getElementById("btn-cadastrar");
-  const btnRemover = document.getElementById("btn-remover");
-  const modalCadastrar = document.getElementById("modal-cadastrar");
-  const modalRemover = document.getElementById("modal-remover");
-
-  btnCadastrar.addEventListener("click", () => {
-    modalCadastrar.classList.remove("hidden");
-    modalRemover.classList.add("hidden");
-  });
-
-  btnRemover.addEventListener("click", () => {
-    modalRemover.classList.remove("hidden");
-    modalCadastrar.classList.add("hidden");
-  });
-
-  // abrir cadastro por padrão
-  modalCadastrar.classList.remove("hidden");
-</script>
+        // abrir cadastro por padrão
+        modalCadastrar.classList.remove("hidden");
+    </script>
 </body>
 </html>
-
