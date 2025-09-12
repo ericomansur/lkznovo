@@ -8,118 +8,383 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="styles.css"/>
   <link rel="icon" type="image/x-icon" href="imagens/lkz_logo.jpg">
+  <style>
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+    
+    @keyframes spin-slow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    @keyframes spin-fast {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(-360deg); }
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+      50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8); }
+    }
+    
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+    
+    @keyframes slideIn {
+      0% { transform: translateX(-100px); opacity: 0; }
+      100% { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes typewriter {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+    
+    @keyframes blink {
+      from, to { border-color: transparent; }
+      50% { border-color: #3b82f6; }
+    }
+    
+    .animate-float { animation: float 3s ease-in-out infinite; }
+    .animate-spin-slow { animation: spin-slow 4s linear infinite; }
+    .animate-spin-fast { animation: spin-fast 2s linear infinite; }
+    .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+    .animate-fadeInOut { animation: fadeInOut 3s ease-in-out infinite; }
+    .animate-slideIn { animation: slideIn 0.8s ease-out forwards; }
+    
+    .typewriter {
+      overflow: hidden;
+      border-right: 2px solid #3b82f6;
+      white-space: nowrap;
+      margin: 0 auto;
+      animation: typewriter 2s steps(40, end), blink 0.75s step-end infinite;
+    }
+    
+    .particle {
+      position: absolute;
+      background: #3b82f6;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .bg-cs-pattern {
+      background-image: 
+        radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(147, 51, 234, 0.1) 0%, transparent 50%);
+    }
+    
+    .progress-bar {
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* Transições de Loading para Main */
+    .loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    .loading-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .main-content {
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    .main-content.visible {
+      opacity: 1;
+    }
+  </style>
 </head>
 <body class="bg-gray-900 text-white font-sans">
-  <!-- HEADER -->
-  <header class="flex justify-between items-center px-6 py-4 bg-gray-800 shadow-md">
-    <div class="text-2xl font-bold text-blue-400">LKZ <span class="text-white">STORE</span></div>
 
-    <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
-      <a href="https://wa.me/556799288899?text=Ol%C3%A1%2C%20gostaria%20de%20vender%20meu%20invent%C3%A1rio"
-        class="bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-400 transition flex items-center gap-2 text-sm sm:text-base"
-        target="_blank">
-        <i class="fa-brands fa-whatsapp"></i> Vender meu Inventário
-      </a>
-
-      <a href="admin.html" title="Login Admin" target="_blank"
-        class="bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-full transition">
-        <i class="fa fa-user text-white"></i>
-      </a>
+  <!-- TELA DE LOADING -->
+  <div id="loading-screen" class="loading-screen bg-gray-900 text-white overflow-hidden bg-cs-pattern">
+    <!-- Partículas flutuantes -->
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="particle w-2 h-2" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+      <div class="particle w-1 h-1" style="top: 60%; left: 20%; animation-delay: 1s;"></div>
+      <div class="particle w-3 h-3" style="top: 40%; left: 80%; animation-delay: 2s;"></div>
+      <div class="particle w-2 h-2" style="top: 80%; left: 60%; animation-delay: 3s;"></div>
+      <div class="particle w-1 h-1" style="top: 30%; left: 90%; animation-delay: 4s;"></div>
     </div>
-  </header>
 
-  <!-- BANNER -->
-  <section class="relative w-full" style="padding-top: 15%"> <!-- ajustar o tamanho do banner -->
-    <div class="absolute inset-0 w-full h-full">
-      <img 
-        src="imagens/banner.png" 
-        alt="Banner" 
-        class="w-full h-full object-cover"
-      >
-      <div class="absolute inset-0 flex items-center justify-center">
-        <!-- Conteúdo centralizado do banner (se necessário no futuro) -->
-         
+    <div class="flex flex-col items-center justify-center min-h-screen px-6 relative z-10">
+      <!-- Logo com animações -->
+      <div class="relative mb-8 animate-slideIn">
+        <div class="relative w-32 h-32 sm:w-40 sm:h-40">
+          <!-- Círculos de carregamento -->
+          <div class="absolute inset-0 border-4 border-blue-500 border-opacity-20 rounded-full animate-spin-slow"></div>
+          <div class="absolute inset-2 border-4 border-purple-500 border-opacity-30 rounded-full animate-spin-fast"></div>
+          <div class="absolute inset-4 border-2 border-blue-400 border-opacity-40 rounded-full animate-spin-slow"></div>
+          
+          <!-- Logo central -->
+          <div class="absolute inset-0 flex items-center justify-center">
+            <img src="imagens/lkz_logo.jpg" alt="LKZ Logo" class="w-24 h-24 sm:w-28 sm:h-28 rounded-full animate-pulse-glow border-2 border-blue-400">
+          </div>
+          
+          <!-- Ícones CS:GO flutuantes -->
+          <div class="absolute -top-4 -right-4 animate-float">
+            <i class="fas fa-crosshairs text-yellow-400 text-xl"></i>
+          </div>
+          <div class="absolute -bottom-4 -left-4 animate-float" style="animation-delay: 1s;">
+            <i class="fas fa-bomb text-red-400 text-xl"></i>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
 
-  <!-- CATEGORIAS -->
-  <nav class="flex flex-wrap justify-center gap-2 p-4 bg-gray-800">
-    <button data-filter="all" class="filter-btn px-3 py-1 bg-blue-500 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2 active">
-      <img src="imagens/cards/Todas.png" alt="Todas" class="w-4 h-4">
-      Todas
-    </button>
-    <button data-filter="knives" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
-      <img src="imagens/cards/Facas.png" alt="Facas" class="w-6 h-4">
-      Facas
-    </button>
-    <button data-filter="gloves" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
-      <img src="imagens/cards/Luvas.png" alt="Luvas" class="w-4 h-4">
-      Luvas
-    </button>
-    <button data-filter="pistols" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
-      <img src="imagens/cards/Pistolas.png" alt="Pistolas" class="w-7 h-4">
-      Pistolas
-    </button>
-    <button data-filter="rifles" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
-      <img src="imagens/cards/Rifles.png" alt="Rifles" class="w-8 h-4">
-      Rifles
-    </button>
-    <button data-filter="smgs" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
-      <img src="imagens/cards/Smg.png" alt="SMGs" class="w-6 h-4">
-      SMGs
-    </button>
-    <button data-filter="heavy" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
-      <img src="imagens/cards/Pesadas.png" alt="Pesadas" class="w-7 h-4">
-      Pesadas
-    </button>
-    <button data-filter="stickers" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
-      <img src="imagens/cards/Adesivos.png" alt="Adesivos" class="w-4 h-4">
-      Adesivos
-    </button>
-    <button data-filter="agents" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
-      <img src="imagens/cards/Agentes.png" alt="Agentes" class="w-4 h-4">
-      Agentes
-    </button>
-    <button data-filter="cases" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
-      <img src="imagens/cards/Caixas.png" alt="Caixas" class="w-5 h-4">
-      Caixas
-    </button>
-    <button data-filter="outros" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
-      <img src="imagens/cards/Outros.png" alt="Outros" class="w-4 h-4">
-      Vendidos
-    </button>
-  </nav>
+      <!-- Título principal -->
+      <div class="text-center mb-8 animate-slideIn" style="animation-delay: 0.2s;">
+        <h1 class="text-4xl sm:text-5xl font-bold text-blue-400 mb-2">
+          LKZ <span class="text-white">STORE</span>
+        </h1>
+        <div class="typewriter text-lg text-gray-300" id="typewriter-text">
+          Carregando as melhores skins...
+        </div>
+      </div>
 
-  <!-- FILTROS -->
-  <div class="flex flex-wrap gap-4 justify-center items-center p-4 bg-gray-900 border-b border-gray-700">
-    <!-- Filtro de nome -->
-    <div class="flex items-center bg-gray-800 px-3 py-2 rounded-lg">
-      <i class="fa fa-search text-gray-400 mr-2"></i>
-      <input id="search" type="text" placeholder="Buscar skins..." class="bg-transparent outline-none text-sm text-white w-48">
+      <!-- Barra de progresso -->
+      <div class="w-full max-w-md mb-8 animate-slideIn" style="animation-delay: 0.4s;">
+        <div class="bg-gray-700 rounded-full h-3 overflow-hidden">
+          <div id="progress" class="progress-bar bg-gradient-to-r from-blue-500 to-purple-600 h-full rounded-full"></div>
+        </div>
+        <div class="flex justify-between text-sm text-gray-400 mt-2">
+          <span id="progress-text">Inicializando...</span>
+          <span id="progress-percentage">0%</span>
+        </div>
+      </div>
+
+      <!-- Curiosidades CS:GO/CS2 -->
+      <div class="text-center max-w-2xl mb-8 animate-slideIn" style="animation-delay: 0.6s;">
+        <div class="bg-gray-800 bg-opacity-60 backdrop-blur-sm rounded-lg p-6 border border-gray-700">
+          <h3 class="text-xl font-semibold text-blue-400 mb-3 flex items-center justify-center gap-2">
+            <i class="fas fa-lightbulb"></i>
+            Você sabia?
+          </h3>
+          <p id="curiosity-text" class="text-gray-300 text-sm sm:text-base leading-relaxed animate-fadeInOut">
+            A AK-47 | Dragon Lore foi uma das primeiras skins lendárias do CS:GO...
+          </p>
+        </div>
+      </div>
+
+      <!-- Status de carregamento -->
+      <div class="flex flex-wrap gap-4 justify-center items-center animate-slideIn" style="animation-delay: 0.8s;">
+        <div class="flex items-center gap-2 bg-gray-800 bg-opacity-60 px-4 py-2 rounded-lg">
+          <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+          <span class="text-sm text-gray-300">Conectando ao servidor</span>
+        </div>
+        <div class="flex items-center gap-2 bg-gray-800 bg-opacity-60 px-4 py-2 rounded-lg">
+          <div class="w-3 h-3 bg-yellow-400 rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
+          <span class="text-sm text-gray-300">Carregando inventário</span>
+        </div>
+        <div class="flex items-center gap-2 bg-gray-800 bg-opacity-60 px-4 py-2 rounded-lg">
+          <div class="w-3 h-3 bg-blue-400 rounded-full animate-pulse" style="animation-delay: 1s;"></div>
+          <span class="text-sm text-gray-300">Verificando preços</span>
+        </div>
+      </div>
+
+
     </div>
   </div>
 
-  <!-- LISTA DE SKINS -->
-  <section id="skins-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 p-6">
-    <!-- Skins carregadas via script.js -->
-  </section>
+  <!-- CONTEÚDO PRINCIPAL DA LOJA -->
+  <div id="main-content" class="main-content">
+    <!-- HEADER -->
+    <header class="flex justify-between items-center px-6 py-4 bg-gray-800 shadow-md">
+      <div class="text-2xl font-bold text-blue-400">LKZ <span class="text-white">STORE</span></div>
 
-  <div>
+      <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+        <a href="https://wa.me/556799288899?text=Ol%C3%A1%2C%20gostaria%20de%20vender%20meu%20invent%C3%A1rio"
+          class="bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-400 transition flex items-center gap-2 text-sm sm:text-base"
+          target="_blank">
+          <i class="fa-brands fa-whatsapp"></i> Vender meu Inventário
+        </a>
+
+        <a href="admin.html" title="Login Admin" target="_blank"
+          class="bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-full transition">
+          <i class="fa fa-user text-white"></i>
+        </a>
+      </div>
+    </header>
+
+    <!-- BANNER -->
+    <section class="relative w-full" style="padding-top: 15%">
+      <div class="absolute inset-0 w-full h-full">
+        <img 
+          src="imagens/banner.png" 
+          alt="Banner" 
+          class="w-full h-full object-cover"
+        >
+        <div class="absolute inset-0 flex items-center justify-center">
+          <!-- Conteúdo centralizado do banner (se necessário no futuro) -->
+        </div>
+      </div>
+    </section>
+
+    <!-- CATEGORIAS -->
+    <nav class="flex flex-wrap justify-center gap-2 p-4 bg-gray-800">
+      <button data-filter="all" class="filter-btn px-3 py-1 bg-blue-500 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2 active">
+        <img src="imagens/cards/Todas.png" alt="Todas" class="w-4 h-4">
+        Todas
+      </button>
+      <button data-filter="knives" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
+        <img src="imagens/cards/Facas.png" alt="Facas" class="w-6 h-4">
+        Facas
+      </button>
+      <button data-filter="gloves" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
+        <img src="imagens/cards/Luvas.png" alt="Luvas" class="w-4 h-4">
+        Luvas
+      </button>
+      <button data-filter="pistols" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
+        <img src="imagens/cards/Pistolas.png" alt="Pistolas" class="w-7 h-4">
+        Pistolas
+      </button>
+      <button data-filter="rifles" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
+        <img src="imagens/cards/Rifles.png" alt="Rifles" class="w-8 h-4">
+        Rifles
+      </button>
+      <button data-filter="smgs" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
+        <img src="imagens/cards/Smg.png" alt="SMGs" class="w-6 h-4">
+        SMGs
+      </button>
+      <button data-filter="heavy" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
+        <img src="imagens/cards/Pesadas.png" alt="Pesadas" class="w-7 h-4">
+        Pesadas
+      </button>
+      <button data-filter="stickers" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
+        <img src="imagens/cards/Adesivos.png" alt="Adesivos" class="w-4 h-4">
+        Adesivos
+      </button>
+      <button data-filter="agents" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
+        <img src="imagens/cards/Agentes.png" alt="Agentes" class="w-4 h-4">
+        Agentes
+      </button>
+      <button data-filter="cases" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
+        <img src="imagens/cards/Caixas.png" alt="Caixas" class="w-5 h-4">
+        Caixas
+      </button>
+      <button data-filter="outros" class="filter-btn px-3 py-1 bg-gray-700 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2">
+        <img src="imagens/cards/Outros.png" alt="Outros" class="w-4 h-4">
+        Vendidos
+      </button>
+    </nav>
+
+    <!-- FILTROS -->
+    <div class="flex flex-wrap gap-4 justify-center items-center p-4 bg-gray-900 border-b border-gray-700">
+      <!-- Filtro de nome -->
+      <div class="flex items-center bg-gray-800 px-3 py-2 rounded-lg">
+        <i class="fa fa-search text-gray-400 mr-2"></i>
+        <input id="search" type="text" placeholder="Buscar skins..." class="bg-transparent outline-none text-sm text-white w-48">
+      </div>
+    </div>
+
+    <!-- LISTA DE SKINS -->
+    <section id="skins-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 p-6">
+      <!-- Skins carregadas via script.js -->
+    </section>
+
+    <div>
       <footer>
         <p class="footer-text">© 2025 LKZ Store - Todos os direitos reservados</p>
         <div class="social-icons">
-            <a href="https://www.instagram.com/lkz.cstore/"><i class="fab fa-instagram"></i></a>
-            <a href="https://discord.gg/Mn5DUh2r"><i class="fab fa-discord"></i></a>
-            <a href="https://chat.whatsapp.com/Jivvx4xoUAR5U1mJPQouKC?mode=ems_wa_t"><i class="fab fa-whatsapp"></i></a>
-            <a href="https://steamcommunity.com/profiles/76561198837106938"><i class="fab fa-steam"></i></a>
+          <a href="https://www.instagram.com/lkz.cstore/"><i class="fab fa-instagram"></i></a>
+          <a href="https://discord.gg/Mn5DUh2r"><i class="fab fa-discord"></i></a>
+          <a href="https://chat.whatsapp.com/Jivvx4xoUAR5U1mJPQouKC?mode=ems_wa_t"><i class="fab fa-whatsapp"></i></a>
+          <a href="https://steamcommunity.com/profiles/76561198837106938"><i class="fab fa-steam"></i></a>
         </div>
       </footer>
+    </div>
   </div>
 
   <script>
-    // JavaScript para o filtro de categorias
+    // ===== SISTEMA DE LOADING =====
+    // Curiosidades CS:GO/CS2
+    const curiosities = [
+      "A AWP | Dragon Lore foi uma das primeiras skins lendárias do CS:GO e continua sendo uma das mais valiosas!",
+      "O CS2 utiliza a Source 2 engine, oferecendo gráficos muito mais realistas e físicas aprimoradas.",
+      "A skin mais cara já vendida foi uma AK-47 Case Hardened Blue Gem por mais de $400.000 dólares!",
+      "No CS2, as granadas de fumaça são dinâmicas e reagem ao ambiente, criando efeitos mais realistas.",
+      "A primeira caixa de armas do CS:GO foi lançada em agosto de 2013, dando início ao sistema de skins.",
+      "O mapa Dust2 é o mais jogado da história do Counter-Strike, presente desde o CS 1.1.",
+      "As facas são os itens mais desejados, com algumas valendo mais que carros de luxo!",
+      "O sistema de Float Value determina o desgaste das skins, variando de 0.00 a 1.00."
+    ];
+
+    // Estados de carregamento
+    const loadingStates = [
+      { text: "Inicializando...", progress: 0 },
+      { text: "Conectando ao Steam...", progress: 15 },
+      { text: "Carregando inventário...", progress: 30 },
+      { text: "Verificando preços...", progress: 45 },
+      { text: "Carregando imagens...", progress: 60 },
+      { text: "Aplicando filtros...", progress: 75 },
+      { text: "Finalizando...", progress: 90 },
+      { text: "Pronto!", progress: 100 }
+    ];
+
+    let currentState = 0;
+    let currentCuriosity = 0;
+
+    // Função para atualizar o progresso
+    function updateProgress() {
+      if (currentState < loadingStates.length) {
+        const state = loadingStates[currentState];
+        document.getElementById('progress').style.width = state.progress + '%';
+        document.getElementById('progress-text').textContent = state.text;
+        document.getElementById('progress-percentage').textContent = state.progress + '%';
+        currentState++;
+        
+        setTimeout(updateProgress, 1000);
+      }
+    }
+
+    // Função para trocar curiosidades
+    function changeCuriosity() {
+      const curiosityElement = document.getElementById('curiosity-text');
+      curiosityElement.style.opacity = '0';
+      
+      setTimeout(() => {
+        curiosityElement.textContent = curiosities[currentCuriosity];
+        curiosityElement.style.opacity = '1';
+        currentCuriosity = (currentCuriosity + 1) % curiosities.length;
+      }, 500);
+    }
+
+    // ===== SISTEMA PRINCIPAL DA LOJA =====
     document.addEventListener('DOMContentLoaded', () => {
+      // Inicializar loading
+      setTimeout(updateProgress, 500);
+      setInterval(changeCuriosity, 3000);
+      
+      // Transição do loading para a loja após 8 segundos
+      setTimeout(() => {
+        const loadingScreen = document.getElementById('loading-screen');
+        const mainContent = document.getElementById('main-content');
+        
+        // Fade out do loading
+        loadingScreen.classList.add('hidden');
+        
+        // Fade in da loja
+        setTimeout(() => {
+          mainContent.classList.add('visible');
+        }, 400);
+        
+      }, 8000);
+
+      // ===== FILTROS DA LOJA =====
       const filterBtns = document.querySelectorAll('.filter-btn');
       const skinsGrid = document.getElementById('skins-grid');
       
@@ -132,11 +397,9 @@
         event.target.classList.add('active');
         
         // Lógica para filtrar as skins
-        // A lógica de exibição de skins deve ser adicionada aqui com base na categoria selecionada
         const filter = event.target.getAttribute('data-filter');
         console.log(`Categoria selecionada: ${filter}`);
-        // Exemplo de como filtrar as skins
-        // Lógica para carregar ou mostrar as skins de acordo com o filtro selecionado
+        // Aqui você pode adicionar a lógica para filtrar as skins
       }
 
       // Adicionar event listeners aos botões de filtro
@@ -144,9 +407,11 @@
         button.addEventListener('click', activateFilter);
       });
 
-      // Lógica para mostrar as skins no carregamento inicial (filtro "all" ativo)
-      const allButton = document.querySelector('[data-filter="all"]');
-      allButton.click();  // Simula o clique no botão "Todas" ao carregar a página
+      // Simular clique no filtro "Todas" ao carregar (após o loading)
+      setTimeout(() => {
+        const allButton = document.querySelector('[data-filter="all"]');
+        if (allButton) allButton.click();
+      }, 8500); // 500ms após o loading terminar
     });
   </script>
 
