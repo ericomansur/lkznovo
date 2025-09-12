@@ -163,3 +163,5 @@ document.addEventListener("DOMContentLoaded", () => {
   // Adiciona um listener para redimensionamento da janela para otimizar a exibição em mobile/desktop
   window.addEventListener("resize", () => applyFiltersAndSearch()); 
 });
+
+
