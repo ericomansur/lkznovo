@@ -2,7 +2,7 @@
 // CONFIG
 // ============================
 // Use a URL primária do seu serviço no Render
-const API_URL = "https://lkz-store-backend.onrender.com"; 
+const API_URL = "https://lkz-store-backend.onrender.com";
 
 // ============================
 // ELEMENTOS DOM
@@ -12,7 +12,7 @@ const searchInput = document.getElementById("search");
 const categoryButtons = document.querySelectorAll("nav button[data-filter]");
 
 // ============================
-// FUNÇÃO PARA VERIFICAR SE É MOBILE
+// FUNÇÃO DE VERIFICAR SE É MOBILE
 // ============================
 function isMobile() {
   return window.innerWidth <= 768;
@@ -30,7 +30,7 @@ function renderSkins(list) {
       "col-span-full text-center text-gray-400 text-lg mt-10 flex flex-col items-center justify-center";
     emptyMessage.innerHTML = `
       <span>
-        Não temos skins nessa sessão ainda! 
+        Não temos skins nessa sessão ainda!
         <img src="imagens/galinha.png" alt="CS2" class="inline w-6 h-6 ml-1 align-text-bottom">
       </span>
       <span class="mt-2 text-sm text-gray-500">Volte mais tarde para novidades</span>
@@ -57,7 +57,7 @@ function renderSkins(list) {
     }
 
     // Usa skin.imageUrl que é retornado pela API
-    const imageSrc = skin.imageUrl || skin.image || ""; 
+    const imageSrc = skin.imageUrl || skin.image || "";
 
     card.innerHTML = `
       <div class="skin-card-header">
@@ -76,7 +76,7 @@ function renderSkins(list) {
         <div class="flex gap-2 w-full justify-center">
           ${skin.inspectLink ? `<a href="${skin.inspectLink}" class="bg-blue-500 hover:bg-blue-400 text-white px-2 py-1 rounded flex items-center gap-1 transition-colors text-sm" target="_blank"><i class="fa fa-eye text-xs"></i> ${mobileView ? "" : '<span class="hidden sm:inline text-xs">Inspecionar</span>'}</a>` : ""}
           ${skin.csfloatLink ? `<a href="${skin.csfloatLink}" class="bg-indigo-500 hover:bg-indigo-400 text-white px-2 py-1 rounded flex items-center gap-1 transition-colors text-sm" target="_blank"><i class="fa fa-external-link text-xs"></i> ${mobileView ? "" : '<span class="hidden sm:inline text-xs">CSFloat</span>'}</a>` : ""}
-          ${skin.whatsapp ? `<a href="${skin.whatsapp}" class="bg-green-500 hover:bg-green-400 text-white px-2 py-1 rounded flex items-center gap-1 transition-colors text-sm" target="_blank"><i class="fa-brands fa-whatsapp text-xs"></i> ${mobileView ? "" : '<span class="hidden sm:inline text-xs">WhatsApp</span>'}</a>` : ""}
+          ${skin.whatsapp && !skin.sold ? `<a href="${skin.whatsapp}" class="bg-green-500 hover:bg-green-400 text-white px-2 py-1 rounded flex items-center gap-1 transition-colors text-sm" target="_blank"><i class="fa-brands fa-whatsapp text-xs"></i> ${mobileView ? "" : '<span class="hidden sm:inline text-xs">WhatsApp</span>'}</a>` : ""}
         </div>
       </div>
     `;
@@ -91,20 +91,17 @@ let allSkins = [];
 
 async function fetchSkins() {
   try {
-    // Certifique-se de que a URL da API está correta e acessível
     const res = await fetch(`${API_URL}/skins`);
     if (!res.ok) {
-      // Verifica o status da resposta para identificar o erro 404
       if (res.status === 404) {
         throw new Error(`Endpoint de skins não encontrado (404). Verifique a URL da API: ${API_URL}`);
       }
       throw new Error(`Erro ao buscar skins (${res.status})`);
     }
     allSkins = await res.json();
-    applyFiltersAndSearch(); // Aplica filtros e busca após carregar as skins
+    applyFiltersAndSearch();
   } catch (err) {
     console.error("Erro ao buscar skins:", err);
-    // Mostra uma mensagem de erro mais informativa para o usuário
     skinsGrid.innerHTML = `<div class="col-span-full text-center text-red-400 mt-10">${err.message}. Por favor, verifique a conexão ou tente mais tarde.</div>`;
   }
 }
@@ -118,18 +115,25 @@ let currentSearch = "";
 function applyFiltersAndSearch() {
   let filtered = allSkins;
 
-  // Filtro por categoria
-  if (currentCategory !== "all") {
-    // Compara a categoria da skin (em minúsculas) com a categoria atual
-    filtered = filtered.filter(s => (s.category || "").toLowerCase() === currentCategory.toLowerCase());
+  // Lógica de filtragem revisada:
+  if (currentCategory === "all") {
+    // Para "Todas", mostra todas as skins (vendidas ou não).
+    filtered = allSkins;
+  } else if (currentCategory === "outros") {
+    // Para "Vendidos", mostra APENAS as skins marcadas como vendidas.
+    filtered = allSkins.filter(s => s.sold);
+  } else {
+    // Para outras categorias específicas (facas, rifles, etc.),
+    // mostra APENAS as skins que NÃO foram vendidas.
+    filtered = allSkins.filter(s => (s.category || "").toLowerCase() === currentCategory.toLowerCase() && !s.sold);
   }
 
-  // Filtro por busca de nome
+  // Filtro por busca de nome (aplica-se a todas as visualizações de filtro)
   if (currentSearch) {
     filtered = filtered.filter(s => (s.name || "").toLowerCase().includes(currentSearch.toLowerCase()));
   }
 
-  renderSkins(filtered); // Renderiza as skins filtradas
+  renderSkins(filtered);
 }
 
 // ============================
@@ -137,13 +141,14 @@ function applyFiltersAndSearch() {
 // ============================
 categoryButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
-    // Remove classes de todos os botões para resetar o estilo
-    categoryButtons.forEach((b) => b.classList.remove("active", "bg-blue-500"));
-    // Adiciona classes ao botão clicado
+    categoryButtons.forEach((b) => {
+      b.classList.remove("active", "bg-blue-500");
+      b.classList.add("bg-gray-700"); // Volta para a cor padrão
+    });
     btn.classList.add("active", "bg-blue-500");
-    // Atualiza a categoria atual
+    btn.classList.remove("bg-gray-700");
     currentCategory = btn.getAttribute("data-filter") || "all";
-    applyFiltersAndSearch(); // Aplica os filtros
+    applyFiltersAndSearch();
   });
 });
 
@@ -151,15 +156,14 @@ categoryButtons.forEach((btn) => {
 // EVENTO DE BUSCA
 // ============================
 searchInput.addEventListener("input", (e) => {
-  currentSearch = e.target.value || ""; // Pega o valor do input, ou string vazia se for nulo/undefined
-  applyFiltersAndSearch(); // Aplica os filtros (incluindo a busca)
+  currentSearch = e.target.value || "";
+  applyFiltersAndSearch();
 });
 
 // ============================
 // INICIALIZAÇÃO
 // ============================
 document.addEventListener("DOMContentLoaded", () => {
-  fetchSkins(); // Carrega as skins quando a página é totalmente carregada
-  // Adiciona um listener para redimensionamento da janela para otimizar a exibição em mobile/desktop
-  window.addEventListener("resize", () => applyFiltersAndSearch()); 
+  fetchSkins();
+  window.addEventListener("resize", () => applyFiltersAndSearch());
 });

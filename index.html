@@ -111,9 +111,7 @@
 </head>
 <body class="bg-gray-900 text-white font-sans">
 
-  <!-- TELA DE LOADING -->
   <div id="loading-screen" class="loading-screen bg-gray-900 text-white overflow-hidden bg-cs-pattern">
-    <!-- Partículas flutuantes -->
     <div class="absolute inset-0 overflow-hidden">
       <div class="particle w-2 h-2" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
       <div class="particle w-1 h-1" style="top: 60%; left: 20%; animation-delay: 1s;"></div>
@@ -123,20 +121,16 @@
     </div>
 
     <div class="flex flex-col items-center justify-center min-h-screen px-6 relative z-10">
-      <!-- Logo com animações -->
       <div class="relative mb-8 animate-slideIn">
         <div class="relative w-32 h-32 sm:w-40 sm:h-40">
-          <!-- Círculos de carregamento -->
           <div class="absolute inset-0 border-4 border-blue-500 border-opacity-20 rounded-full animate-spin-slow"></div>
           <div class="absolute inset-2 border-4 border-purple-500 border-opacity-30 rounded-full animate-spin-fast"></div>
           <div class="absolute inset-4 border-2 border-blue-400 border-opacity-40 rounded-full animate-spin-slow"></div>
           
-          <!-- Logo central -->
           <div class="absolute inset-0 flex items-center justify-center">
             <img src="imagens/lkz_logo.jpg" alt="LKZ Logo" class="w-24 h-24 sm:w-28 sm:h-28 rounded-full animate-pulse-glow border-2 border-blue-400">
           </div>
           
-          <!-- Ícones CS:GO flutuantes -->
           <div class="absolute -top-4 -right-4 animate-float">
             <i class="fas fa-crosshairs text-yellow-400 text-xl"></i>
           </div>
@@ -146,7 +140,6 @@
         </div>
       </div>
 
-      <!-- Título principal -->
       <div class="text-center mb-8 animate-slideIn" style="animation-delay: 0.2s;">
         <h1 class="text-4xl sm:text-5xl font-bold text-blue-400 mb-2">
           LKZ <span class="text-white">STORE</span>
@@ -156,7 +149,6 @@
         </div>
       </div>
 
-      <!-- Barra de progresso -->
       <div class="w-full max-w-md mb-8 animate-slideIn" style="animation-delay: 0.4s;">
         <div class="bg-gray-700 rounded-full h-3 overflow-hidden">
           <div id="progress" class="progress-bar bg-gradient-to-r from-blue-500 to-purple-600 h-full rounded-full"></div>
@@ -167,7 +159,6 @@
         </div>
       </div>
 
-      <!-- Curiosidades CS:GO/CS2 -->
       <div class="text-center max-w-2xl mb-8 animate-slideIn" style="animation-delay: 0.6s;">
         <div class="bg-gray-800 bg-opacity-60 backdrop-blur-sm rounded-lg p-6 border border-gray-700">
           <h3 class="text-xl font-semibold text-blue-400 mb-3 flex items-center justify-center gap-2">
@@ -180,7 +171,6 @@
         </div>
       </div>
 
-      <!-- Status de carregamento -->
       <div class="flex flex-wrap gap-4 justify-center items-center animate-slideIn" style="animation-delay: 0.8s;">
         <div class="flex items-center gap-2 bg-gray-800 bg-opacity-60 px-4 py-2 rounded-lg">
           <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
@@ -195,14 +185,10 @@
           <span class="text-sm text-gray-300">Verificando preços</span>
         </div>
       </div>
-
-
     </div>
   </div>
 
-  <!-- CONTEÚDO PRINCIPAL DA LOJA -->
   <div id="main-content" class="main-content">
-    <!-- HEADER -->
     <header class="flex justify-between items-center px-6 py-4 bg-gray-800 shadow-md">
       <div class="text-2xl font-bold text-blue-400">LKZ <span class="text-white">STORE</span></div>
 
@@ -220,7 +206,6 @@
       </div>
     </header>
 
-    <!-- BANNER -->
     <section class="relative w-full" style="padding-top: 15%">
       <div class="absolute inset-0 w-full h-full">
         <img 
@@ -229,12 +214,10 @@
           class="w-full h-full object-cover"
         >
         <div class="absolute inset-0 flex items-center justify-center">
-          <!-- Conteúdo centralizado do banner (se necessário no futuro) -->
-        </div>
+          </div>
       </div>
     </section>
 
-    <!-- CATEGORIAS -->
     <nav class="flex flex-wrap justify-center gap-2 p-4 bg-gray-800">
       <button data-filter="all" class="filter-btn px-3 py-1 bg-blue-500 rounded-full text-sm font-semibold hover:bg-blue-400 transition flex items-center gap-2 active">
         <img src="imagens/cards/Todas.png" alt="Todas" class="w-4 h-4">
@@ -282,19 +265,15 @@
       </button>
     </nav>
 
-    <!-- FILTROS -->
     <div class="flex flex-wrap gap-4 justify-center items-center p-4 bg-gray-900 border-b border-gray-700">
-      <!-- Filtro de nome -->
       <div class="flex items-center bg-gray-800 px-3 py-2 rounded-lg">
         <i class="fa fa-search text-gray-400 mr-2"></i>
         <input id="search" type="text" placeholder="Buscar skins..." class="bg-transparent outline-none text-sm text-white w-48">
       </div>
     </div>
 
-    <!-- LISTA DE SKINS -->
     <section id="skins-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 p-6">
-      <!-- Skins carregadas via script.js -->
-    </section>
+      </section>
 
     <div>
       <footer class="bg-gradient-to-r from-gray-800 via-gray-900 to-gray-800 py-12 mt-16 border-t border-gray-700">
@@ -332,108 +311,125 @@
   </div>
 
   <script>
-    // ===== SISTEMA DE LOADING =====
-    // Curiosidades CS:GO/CS2
-    const curiosities = [
-      "O CS2 utiliza a Source 2 engine, oferecendo gráficos muito mais realistas e físicas aprimoradas.",
-      "A skin mais cara já vendida foi uma AK-47 Case Hardened Blue Gem por mais de $400.000 dólares!",
-      "No CS2, as granadas de fumaça são dinâmicas e reagem ao ambiente, criando efeitos mais realistas.",
-      "A primeira caixa de armas do CS:GO foi lançada em agosto de 2013, dando início ao sistema de skins.",
-      "O mapa Dust2 é o mais jogado da história do Counter-Strike, presente desde o CS 1.1.",
-      "As facas são os itens mais desejados, com algumas valendo mais que carros de luxo!",
-      "O sistema de Float Value determina o desgaste das skins, variando de 0.00 a 1.00."
-    ];
+      // ===== SISTEMA DE LOADING =====
+      const loadingScreen = document.getElementById('loading-screen');
+      const mainContent = document.getElementById('main-content');
+      const hasVisited = sessionStorage.getItem('hasVisitedLKZ');
 
-    // Estados de carregamento
-    const loadingStates = [
-      { text: "Inicializando...", progress: 0 },
-      { text: "Conectando ao Steam...", progress: 15 },
-      { text: "Carregando inventário...", progress: 30 },
-      { text: "Verificando preços...", progress: 45 },
-      { text: "Carregando imagens...", progress: 60 },
-      { text: "Aplicando filtros...", progress: 75 },
-      { text: "Finalizando...", progress: 90 },
-      { text: "Pronto!", progress: 100 }
-    ];
+      // Se o usuário já visitou, pular o loading
+      if (hasVisited) {
+        loadingScreen.style.display = 'none';
+        mainContent.classList.add('visible');
+      } else {
+        // Curiosidades CS:GO/CS2
+        const curiosities = [
+          "O CS2 utiliza a Source 2 engine, oferecendo gráficos muito mais realistas e físicas aprimoradas.",
+          "A skin mais cara já vendida foi uma AK-47 Case Hardened Blue Gem por mais de $400.000 dólares!",
+          "No CS2, as granadas de fumaça são dinâmicas e reagem ao ambiente, criando efeitos mais realistas.",
+          "A primeira caixa de armas do CS:GO foi lançada em agosto de 2013, dando início ao sistema de skins.",
+          "O mapa Dust2 é o mais jogado da história do Counter-Strike, presente desde o CS 1.1.",
+          "As facas são os itens mais desejados, com algumas valendo mais que carros de luxo!",
+          "O sistema de Float Value determina o desgaste das skins, variando de 0.00 a 1.00."
+        ];
 
-    let currentState = 0;
-    let currentCuriosity = 0;
+        // Estados de carregamento com tempos de exibição ajustados
+        const loadingStates = [
+          { text: "Inicializando...", progress: 5, delay: 2000 }, // 2 segundos
+          { text: "Conectando ao Steam...", progress: 15, delay: 3000 }, // 3 segundos
+          { text: "Carregando inventário...", progress: 30, delay: 4000 }, // 4 segundos
+          { text: "Verificando preços...", progress: 45, delay: 3000 }, // 3 segundos
+          { text: "Carregando imagens...", progress: 60, delay: 3000 }, // 3 segundos
+          { text: "Aplicando filtros...", progress: 75, delay: 3000 }, // 3 segundos
+          { text: "Finalizando...", progress: 90, delay: 3000 }, // 3 segundos
+          { text: "Pronto!", progress: 100, delay: 1000 } // 1 segundo final
+        ];
 
-    // Função para atualizar o progresso
-    function updateProgress() {
-      if (currentState < loadingStates.length) {
-        const state = loadingStates[currentState];
-        document.getElementById('progress').style.width = state.progress + '%';
-        document.getElementById('progress-text').textContent = state.text;
-        document.getElementById('progress-percentage').textContent = state.progress + '%';
-        currentState++;
-        
-        setTimeout(updateProgress, 1000);
+        let currentState = 0;
+        let currentCuriosity = 0;
+        const totalLoadingDuration = 25000; // Duração total de 25 segundos
+
+        // Função para atualizar o progresso
+        function updateProgress() {
+          if (currentState < loadingStates.length) {
+            const state = loadingStates[currentState];
+            const progressBar = document.getElementById('progress');
+            const progressText = document.getElementById('progress-text');
+            const progressPercentage = document.getElementById('progress-percentage');
+
+            // Calcula o progresso baseado no tempo total e nos delays dos estados
+            const elapsedTime = loadingStates.slice(0, currentState).reduce((sum, s) => sum + s.delay, 0);
+            const progressValue = (elapsedTime / totalLoadingDuration) * 100;
+            
+            // Garante que a barra não ultrapasse 100% antes do final
+            progressBar.style.width = Math.min(progressValue, 100) + '%';
+            progressText.textContent = state.text;
+            progressPercentage.textContent = Math.min(progressValue, 100).toFixed(0) + '%';
+            
+            currentState++;
+            
+            // Agenda a próxima atualização com base no delay do estado atual
+            setTimeout(updateProgress, state.delay);
+          }
+        }
+
+        // Função para trocar curiosidades
+        function changeCuriosity() {
+          const curiosityElement = document.getElementById('curiosity-text');
+          curiosityElement.style.opacity = '0';
+          
+          setTimeout(() => {
+            curiosityElement.textContent = curiosities[currentCuriosity];
+            curiosityElement.style.opacity = '1';
+            currentCuriosity = (currentCuriosity + 1) % curiosities.length;
+          }, 500); // Pequeno delay para a transição de opacidade
+        }
+
+        // Iniciar o sistema de loading
+        document.addEventListener('DOMContentLoaded', () => {
+          // Inicia a atualização do progresso
+          updateProgress();
+          // Inicia a troca de curiosidades com um intervalo maior
+          setInterval(changeCuriosity, 6000); // A cada 6 segundos
+
+          // Transição do loading para a loja após o tempo total definido
+          setTimeout(() => {
+            loadingScreen.classList.add('hidden');
+            
+            setTimeout(() => {
+              mainContent.classList.add('visible');
+              sessionStorage.setItem('hasVisitedLKZ', 'true'); // Armazenar que a página foi visitada
+            }, 400); // Delay suave para a transição do fade out do loading
+          }, totalLoadingDuration);
+        });
       }
-    }
-
-    // Função para trocar curiosidades
-    function changeCuriosity() {
-      const curiosityElement = document.getElementById('curiosity-text');
-      curiosityElement.style.opacity = '0';
-      
-      setTimeout(() => {
-        curiosityElement.textContent = curiosities[currentCuriosity];
-        curiosityElement.style.opacity = '1';
-        currentCuriosity = (currentCuriosity + 1) % curiosities.length;
-      }, 500);
-    }
-
-    // ===== SISTEMA PRINCIPAL DA LOJA =====
-    document.addEventListener('DOMContentLoaded', () => {
-      // Inicializar loading
-      setTimeout(updateProgress, 500);
-      setInterval(changeCuriosity, 3000);
-      
-      // Transição do loading para a loja após 8 segundos
-      setTimeout(() => {
-        const loadingScreen = document.getElementById('loading-screen');
-        const mainContent = document.getElementById('main-content');
-        
-        // Fade out do loading
-        loadingScreen.classList.add('hidden');
-        
-        // Fade in da loja
-        setTimeout(() => {
-          mainContent.classList.add('visible');
-        }, 400);
-        
-      }, 8000);
 
       // ===== FILTROS DA LOJA =====
-      const filterBtns = document.querySelectorAll('.filter-btn');
-      const skinsGrid = document.getElementById('skins-grid');
-      
-      // Função para ativar o filtro
-      function activateFilter(event) {
-        // Remover a classe 'active' de todos os botões
-        filterBtns.forEach(button => button.classList.remove('active'));
+      document.addEventListener('DOMContentLoaded', () => {
+        const filterBtns = document.querySelectorAll('.filter-btn');
         
-        // Adicionar a classe 'active' ao botão clicado
-        event.target.classList.add('active');
-        
-        // Lógica para filtrar as skins
-        const filter = event.target.getAttribute('data-filter');
-        console.log(`Categoria selecionada: ${filter}`);
-        // Aqui você pode adicionar a lógica para filtrar as skins
-      }
+        function activateFilter(event) {
+          filterBtns.forEach(button => {
+            button.classList.remove('active', 'bg-blue-500');
+            button.classList.add('bg-gray-700'); // Volta para a cor padrão
+          });
+          
+          event.target.classList.add('active', 'bg-blue-500');
+          event.target.classList.remove('bg-gray-700');
+          
+          const filter = event.target.getAttribute('data-filter');
+          console.log(`Categoria selecionada: ${filter}`);
+        }
 
-      // Adicionar event listeners aos botões de filtro
-      filterBtns.forEach(button => {
-        button.addEventListener('click', activateFilter);
+        filterBtns.forEach(button => {
+          button.addEventListener('click', activateFilter);
+        });
+
+        // Simular clique no filtro "Todas" após o loading terminar (ou imediatamente se já visitado)
+        setTimeout(() => {
+          const allButton = document.querySelector('[data-filter="all"]');
+          if (allButton) allButton.click();
+        }, hasVisited ? 0 : 25000); // 25 segundos para o loading, 0 se já visitado
       });
-
-      // Simular clique no filtro "Todas" ao carregar (após o loading)
-      setTimeout(() => {
-        const allButton = document.querySelector('[data-filter="all"]');
-        if (allButton) allButton.click();
-      }, 8500); // 500ms após o loading terminar
-    });
   </script>
 
   <script src="script.js"></script>
