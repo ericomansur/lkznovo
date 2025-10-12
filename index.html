@@ -389,7 +389,7 @@
       // Estados de carregamento com tempos de exibição ajustados
       const loadingStates = [
         { text: "Inicializando...", progress: 5, delay: 2000 },
-        { text: "Conectando ao Steam...", progress: 15, delay: 3000 },
+        { text: "Conectando ao Steam...", progress: 15, delay: 2000 },
         { text: "Carregando inventário...", progress: 30, delay: 4000 },
         { text: "Verificando preços...", progress: 45, delay: 3000 },
         { text: "Carregando imagens...", progress: 60, delay: 3000 },
@@ -400,7 +400,7 @@
 
       let currentState = 0;
       let currentCuriosity = 0;
-      const totalLoadingDuration = 25000;
+      const totalLoadingDuration = 4000;
 
       // Função para atualizar o progresso
       function updateProgress() {
