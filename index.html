@@ -10,7 +10,7 @@
   <link rel="icon" type="image/x-icon" href="imagens/lkz_logo.jpg">
   <style>
     /* ANIMAÇÕES DO LOADING */
-    @keyframes float {
+    /* @keyframes float {
       0%, 100% { transform: translateY(0px) rotate(0deg); }
       50% { transform: translateY(-20px) rotate(180deg); }
     }
@@ -48,7 +48,7 @@
     @keyframes blink {
       from, to { border-color: transparent; }
       50% { border-color: #3b82f6; }
-    }
+    } */
 
     /* ESTILOS E ANIMAÇÕES DO BANNER */
     @keyframes float-banner {
@@ -95,12 +95,12 @@
     }
 
     /* CLASSES UTILITY DO LOADING */
-    .animate-float { animation: float 3s ease-in-out infinite; }
+    /* .animate-float { animation: float 3s ease-in-out infinite; }
     .animate-spin-slow { animation: spin-slow 4s linear infinite; }
     .animate-spin-fast { animation: spin-fast 2s linear infinite; }
     .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
     .animate-fadeInOut { animation: fadeInOut 3s ease-in-out infinite; }
-    .animate-slideIn { animation: slideIn 0.8s ease-out forwards; }
+    .animate-slideIn { animation: slideIn 0.8s ease-out forwards; } */
     
     .typewriter {
       overflow: hidden;
@@ -130,7 +130,7 @@
     }
 
     /* TRANSIÇÕES DE LOADING */
-    .loading-screen {
+    /* .loading-screen {
       position: fixed;
       top: 0;
       left: 0;
@@ -143,7 +143,7 @@
     .loading-screen.hidden {
       opacity: 0;
       visibility: hidden;
-    }
+    } */
 
     .main-content {
       opacity: 0;
@@ -157,7 +157,7 @@
 </head>
 <body class="bg-gray-900 text-white font-sans">
 
-  <div id="loading-screen" class="loading-screen bg-gray-900 text-white overflow-hidden bg-cs-pattern">
+  <!-- <div id="loading-screen" class="loading-screen bg-gray-900 text-white overflow-hidden bg-cs-pattern">
     <div class="absolute inset-0 overflow-hidden">
       <div class="particle w-2 h-2" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
       <div class="particle w-1 h-1" style="top: 60%; left: 20%; animation-delay: 1s;"></div>
@@ -232,7 +232,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <div id="main-content" class="main-content">
     <header class="flex justify-between items-center px-6 py-4 bg-gray-800 shadow-md">
@@ -367,89 +367,89 @@
 
   <script>
     // ===== SISTEMA DE LOADING =====
-    const loadingScreen = document.getElementById('loading-screen');
-    const mainContent = document.getElementById('main-content');
-    const hasVisited = sessionStorage.getItem('hasVisitedLKZ');
+    // const loadingScreen = document.getElementById('loading-screen');
+    // const mainContent = document.getElementById('main-content');
+    // const hasVisited = sessionStorage.getItem('hasVisitedLKZ');
 
     // Se o usuário já visitou, pular o loading
-    if (hasVisited) {
-      loadingScreen.style.display = 'none';
-      mainContent.classList.add('visible');
-    } else {
-      // Curiosidades CS:GO/CS2
-      const curiosities = [
-        "O mapa Dust2 existe desde 1999 e continua sendo o mais jogado da franquia.",
-        "No CS2, as granadas de fumaça são dinâmicas e reagem ao ambiente, criando efeitos mais realistas.",
-        "A primeira caixa de armas do CS:GO foi lançada em agosto de 2013, dando início ao sistema de skins.",
-        "O mapa Dust2 é o mais jogado da história do Counter-Strike, presente desde o CS 1.1.",
-        "O sistema de Float Value determina o desgaste das skins, variando de 0.00 a 1.00.",
-        "As galinhas em CS:GO podem seguir o jogador se ele soltar a arma — e até apareceram em torneios oficiais."
-      ];
+    // if (hasVisited) {
+    //   loadingScreen.style.display = 'none';
+    //   mainContent.classList.add('visible');
+    // } else {
+    //   // Curiosidades CS:GO/CS2
+    //   const curiosities = [
+    //     "O mapa Dust2 existe desde 1999 e continua sendo o mais jogado da franquia.",
+    //     "No CS2, as granadas de fumaça são dinâmicas e reagem ao ambiente, criando efeitos mais realistas.",
+    //     "A primeira caixa de armas do CS:GO foi lançada em agosto de 2013, dando início ao sistema de skins.",
+    //     "O mapa Dust2 é o mais jogado da história do Counter-Strike, presente desde o CS 1.1.",
+    //     "O sistema de Float Value determina o desgaste das skins, variando de 0.00 a 1.00.",
+    //     "As galinhas em CS:GO podem seguir o jogador se ele soltar a arma — e até apareceram em torneios oficiais."
+    //   ];
 
       // Estados de carregamento com tempos de exibição ajustados
-      const loadingStates = [
-        { text: "Inicializando...", progress: 5, delay: 2000 },
-        { text: "Conectando ao Steam...", progress: 15, delay: 2000 },
-        { text: "Carregando inventário...", progress: 30, delay: 4000 },
-        { text: "Verificando preços...", progress: 45, delay: 3000 },
-        { text: "Carregando imagens...", progress: 60, delay: 3000 },
-        { text: "Aplicando filtros...", progress: 75, delay: 3000 },
-        { text: "Finalizando...", progress: 90, delay: 3000 },
-        { text: "Pronto!", progress: 100, delay: 1000 }
-      ];
+      // const loadingStates = [
+      //   { text: "Inicializando...", progress: 5, delay: 2000 },
+      //   { text: "Conectando ao Steam...", progress: 15, delay: 2000 },
+      //   { text: "Carregando inventário...", progress: 30, delay: 4000 },
+      //   { text: "Verificando preços...", progress: 45, delay: 3000 },
+      //   { text: "Carregando imagens...", progress: 60, delay: 3000 },
+      //   { text: "Aplicando filtros...", progress: 75, delay: 3000 },
+      //   { text: "Finalizando...", progress: 90, delay: 3000 },
+      //   { text: "Pronto!", progress: 100, delay: 1000 }
+      // ];
 
-      let currentState = 0;
-      let currentCuriosity = 0;
-      const totalLoadingDuration = 4000;
+      // let currentState = 0;
+      // let currentCuriosity = 0;
+      // const totalLoadingDuration = 4000;
 
       // Função para atualizar o progresso
-      function updateProgress() {
-        if (currentState < loadingStates.length) {
-          const state = loadingStates[currentState];
-          const progressBar = document.getElementById('progress');
-          const progressText = document.getElementById('progress-text');
-          const progressPercentage = document.getElementById('progress-percentage');
+      // function updateProgress() {
+      //   if (currentState < loadingStates.length) {
+      //     const state = loadingStates[currentState];
+      //     const progressBar = document.getElementById('progress');
+      //     const progressText = document.getElementById('progress-text');
+      //     const progressPercentage = document.getElementById('progress-percentage');
 
-          const elapsedTime = loadingStates.slice(0, currentState).reduce((sum, s) => sum + s.delay, 0);
-          const progressValue = (elapsedTime / totalLoadingDuration) * 100;
+      //     const elapsedTime = loadingStates.slice(0, currentState).reduce((sum, s) => sum + s.delay, 0);
+      //     const progressValue = (elapsedTime / totalLoadingDuration) * 100;
           
-          progressBar.style.width = Math.min(progressValue, 100) + '%';
-          progressText.textContent = state.text;
-          progressPercentage.textContent = Math.min(progressValue, 100).toFixed(0) + '%';
+      //     progressBar.style.width = Math.min(progressValue, 100) + '%';
+      //     progressText.textContent = state.text;
+      //     progressPercentage.textContent = Math.min(progressValue, 100).toFixed(0) + '%';
           
-          currentState++;
+      //     currentState++;
           
-          setTimeout(updateProgress, state.delay);
-        }
-      }
+      //     setTimeout(updateProgress, state.delay);
+      //   }
+      // }
 
       // Função para trocar curiosidades
-      function changeCuriosity() {
-        const curiosityElement = document.getElementById('curiosity-text');
-        curiosityElement.style.opacity = '0';
+      // function changeCuriosity() {
+      //   const curiosityElement = document.getElementById('curiosity-text');
+      //   curiosityElement.style.opacity = '0';
         
-        setTimeout(() => {
-          curiosityElement.textContent = curiosities[currentCuriosity];
-          curiosityElement.style.opacity = '1';
-          currentCuriosity = (currentCuriosity + 1) % curiosities.length;
-        }, 500);
-      }
+      //   setTimeout(() => {
+      //     curiosityElement.textContent = curiosities[currentCuriosity];
+      //     curiosityElement.style.opacity = '1';
+      //     currentCuriosity = (currentCuriosity + 1) % curiosities.length;
+      //   }, 500);
+      // }
 
       // Iniciar o sistema de loading
-      document.addEventListener('DOMContentLoaded', () => {
-        updateProgress();
-        setInterval(changeCuriosity, 6000);
+    //   document.addEventListener('DOMContentLoaded', () => {
+    //     updateProgress();
+    //     setInterval(changeCuriosity, 6000);
 
-        setTimeout(() => {
-          loadingScreen.classList.add('hidden');
+    //     setTimeout(() => {
+    //       loadingScreen.classList.add('hidden');
           
-          setTimeout(() => {
-            mainContent.classList.add('visible');
-            sessionStorage.setItem('hasVisitedLKZ', 'true');
-          }, 400);
-        }, totalLoadingDuration);
-      });
-    }
+    //       setTimeout(() => {
+    //         mainContent.classList.add('visible');
+    //         sessionStorage.setItem('hasVisitedLKZ', 'true');
+    //       }, 400);
+    //     }, totalLoadingDuration);
+    //   });
+    // }
 
     // ===== FILTROS DA LOJA =====
     document.addEventListener('DOMContentLoaded', () => {
